@@ -38,7 +38,7 @@ const char* fragmentShaderSource = "#version 330 core\n"
 "out vec4 FragColor;\n"
 "void main()\n"
 "{\n"
-"	FragColor = vec4(1.0f, 0.5f, 0.2f,);\n"
+"	FragColor = vec4(1.0f, 0.5f, 0.2f,1.0f);\n"
 "}\0";
 
 float vertices[] = {
@@ -106,7 +106,7 @@ int main()
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
 
-	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &VBO);//Éú³ÉÎ¨Ò»id
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
