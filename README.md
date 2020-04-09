@@ -1,2 +1,2 @@
 # HelloOpenGL
-OpenGL 了啊ring
+学习OpenGL 
