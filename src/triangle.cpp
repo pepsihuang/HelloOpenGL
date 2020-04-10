@@ -1,50 +1,57 @@
 
+
 #include <glad/glad.h>
 #include <glfw/glfw3.h>
 #include <iostream>
 
+namespace TRIANGLE_ {
 
-void framebuffer_size_callback(GLFWwindow*  wnd, int width, int height)
-{
-	glViewport(0, 0, width, height);//调整视窗区域
-}
 
-void processInput(GLFWwindow* wnd)
-{
-	//检查是否按下esc键
-	if (glfwGetKey(wnd, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+	void framebuffer_size_callback(GLFWwindow*  wnd, int width, int height)
 	{
-		//关闭窗口QA
-		glfwSetWindowShouldClose(wnd, true);
+		glViewport(0, 0, width, height);//调整视窗区域
 	}
-}
 
-const unsigned int SCR_WIDTH = 1280;
-const unsigned int SCR_HEIGHT = 720;
+	void processInput(GLFWwindow* wnd)
+	{
+		//检查是否按下esc键
+		if (glfwGetKey(wnd, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		{
+			//关闭窗口QA
+			glfwSetWindowShouldClose(wnd, true);
+		}
+	}
 
-//顶点着色代码
-const char* vertexShaderSource = "#version 330 core\n"
-"layout (location = 0) in vec3 aPos;\n"
-"void main()\n"
-"{\n"
-"	gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-"}\0";
+	const unsigned int SCR_WIDTH = 1280;
+	const unsigned int SCR_HEIGHT = 720;
 
-//片元着色代码
-const char* fragmentShaderSource = "#version 330 core\n"
-"out vec4 FragColor;\n"
-"void main()\n"
-"{\n"
-"	FragColor = vec4(1.0f, 0.5f, 0.2f,1.0f);\n"
-"}\0";
+	//顶点着色代码
+	const char* vertexShaderSource = "#version 330 core\n"
+		"layout (location = 0) in vec3 aPos;\n"
+		"void main()\n"
+		"{\n"
+		"	gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+		"}\0";
 
-float vertices[] = {
-	-0.5f, -0.5f, 0.0f,
-	0.5f, -0.5f, 0.0f,
-	-0.0f, 0.5f, 0.0f
-};
+	//片元着色代码
+	const char* fragmentShaderSource = "#version 330 core\n"
+		"out vec4 FragColor;\n"
+		"void main()\n"
+		"{\n"
+		"	FragColor = vec4(1.0f, 0.5f, 0.2f,1.0f);\n"
+		"}\0";
 
-int main()
+	float vertices[] = {
+		-0.5f, -0.5f, 0.0f,
+		0.5f, -0.5f, 0.0f,
+		-0.0f, 0.5f, 0.0f
+	};
+
+
+
+
+//int main()
+int funcmain()
 {
 	std::cout << "Hello OpenGL!" << std::endl;
 	//初始化
@@ -130,5 +137,7 @@ int main()
 	return 0;
 }
 
+
+}
 
 
