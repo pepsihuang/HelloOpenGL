@@ -1,10 +1,12 @@
 #include "triangle.h"
+#include "triangle_shader.h"
 
 
 
 int main()
 {
-	Triangle tri;
+	//Triangle tri;
+	TriangleShader tri;
 	return tri.funcmain();
 
 }
