@@ -119,9 +119,12 @@ public:
 
 		glGenBuffers(1, &VBO);//生成唯一id
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		//参数 1,顶点数据需要拷贝到的地方(VBO) 2,数组大小 3,数组地址 4,告诉显卡采用什么方式管理数据 GL_STATIC_DRAW为无须改变数据
 		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+		//参数 1, 对应的顶点属性编号(location=0) 2,顶点属性的大小 
+		//3,数据类型 4,指明是否需要规范化(暂时不知道是什么东西) 
+		//5,属性跨度 即数组中每三个为一组
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)0);
 		glEnableVertexAttribArray(0);
 
 		//循环渲染
