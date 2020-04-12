@@ -110,11 +110,27 @@ public:
 		int vertexShader = glCreateShader(GL_VERTEX_SHADER);
 		glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
 		glCompileShader(vertexShader);
+		//check
+		int success = 0;
+		char infoLog[512] = { 0 };
+		glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+		if (!success)
+		{
+			glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+			std::cout << "complie vertex shader FAILED!\n" << infoLog << std::endl;
+		}
 
 		//片元着色器
 		int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 		glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
 		glCompileShader(fragmentShader);
+		glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+		if (!success)
+		{
+			glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+			std::cout << "compile fragment shader FAILED!\n" << infoLog << std::endl;
+		}
+		
 
 		//链接着色器
 		int shaderProgram = glCreateProgram();//创建一个着色器程序
