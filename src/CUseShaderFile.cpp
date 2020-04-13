@@ -81,6 +81,9 @@ int CUseShaderFile::funcmain()
 		glClear(GL_COLOR_BUFFER_BIT);//
 
 		shader.use();
+		double timeValue = glfwGetTime();
+ 		double Value = (sin(timeValue) / 2.0f) + 0.5f;
+		shader.setFloat("xoffset", Value);
 		//glUseProgram(shaderProgram);
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLE_FAN, 0, 3);
