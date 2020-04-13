@@ -7,57 +7,58 @@
 
 
 
-CShaderFromFile::CShaderFromFile(ShaderType type, const char* filepath)
+CShaderFromFile::CShaderFromFile(const char* vefilepath, const char* fragfilepath)
 	: m_id(0)
-	, m_type(type)
 {
 
-	if (!filepath)
+	if (!vefilepath || !fragfilepath)
 	{
 		std::cout << "FILEPATH ERROR!" << std::endl;
 		return;
 	}
 
-	std::string code;
-	std::ifstream strfile;
-	//strfile.execptions();
+	std::string codev;
+	std::string codef;
+	std::ifstream strfilev;
+	std::ifstream strfilef;
 
 	try {
-		strfile.open(filepath);
-		std::stringstream stream;
-		stream << strfile.rdbuf();
-		strfile.close();
-		code = stream.str();
+		strfilev.open(vefilepath);
+		strfilef.open(fragfilepath);
+		std::stringstream streamv;
+		std::stringstream streamf;
+		streamv << strfilev.rdbuf();
+		streamf << strfilef.rdbuf();
+		strfilev.close();
+		strfilef.close();
+		codev = streamv.str();
+		codef = streamf.str();
 	}
 	catch(std::ifstream::failure& e)
 	{
 		std::cout << " FILE OPEN FAILED!" << std::endl;
 	}
-	const char* char_code = code.c_str();
-	unsigned int ss;
+	const char* char_codev = codev.c_str();
+	const char* char_codef = codef.c_str();
+	
+	unsigned int ssv = glCreateShader(GL_VERTEX_SHADER);
+	unsigned int ssf = glCreateShader(GL_FRAGMENT_SHADER);
 
-	switch (type)
-	{
-	case _ST_Vertex_:
-	{
-		ss = glCreateShader(GL_VERTEX_SHADER);
-		break;
-	}
-	case _ST_Fragment_:
-	{
-		ss = glCreateShader(GL_FRAGMENT_SHADER);
-		break;
-	}
-	}
-	glShaderSource(ss, 1, &char_code, NULL);
-	glCompileShader(ss);
-	CheckCompileErr(ss, false);
+
+	glShaderSource(ssv, 1, &char_codev, NULL);
+	glShaderSource(ssf, 1, &char_codef, NULL);
+	glCompileShader(ssv);
+	glCompileShader(ssf);
+	CheckCompileErr(ssv, "vertex");
+	CheckCompileErr(ssf, "fragment");
 	m_id = glCreateProgram();
-	glAttachShader(m_id, ss);
+	glAttachShader(m_id, ssv);
+	glAttachShader(m_id, ssf);
 	glLinkProgram(m_id);
-	CheckCompileErr(m_id, true);
+	CheckCompileErr(m_id, "program");
 
-
+	glDeleteShader(ssv);
+	glDeleteShader(ssf);
 }
 
 
@@ -66,41 +67,29 @@ CShaderFromFile::~CShaderFromFile()
 }
 
 
-void CShaderFromFile::CheckCompileErr(unsigned int ss, bool isProgramm)
+void CShaderFromFile::CheckCompileErr(unsigned int ss, const std::string& str)
 {
 	int success = 0;
 	char infoLog[512] = { 0 };
-	if (isProgramm)
+	if (str == "program")
 	{
 		glGetProgramiv(ss, GL_COMPILE_STATUS, &success);
 		if (!success)
 		{
 			glGetProgramInfoLog(ss, 512, NULL, infoLog);
-			std::cout << "Link Program shader FAILED!\n" << infoLog << std::endl;
+			std::cout <<str<< " : Link Program shader FAILED!\n" << infoLog << std::endl;
 		}
 	} 
 	else
 	{
-		switch (m_type)
-		{
-		case _ST_Vertex_:
-			glGetShaderiv(ss, GL_COMPILE_STATUS, &success);
-			if (!success)
-			{
-				glGetShaderInfoLog(ss, 512, NULL, infoLog);
-				std::cout << "complie vertex shader FAILED!\n" << infoLog << std::endl;
-			}
-			break;
-		case _ST_Fragment_:
-			glGetShaderiv(ss, GL_COMPILE_STATUS, &success);
-			if (!success)
-			{
-				glGetShaderInfoLog(ss, 512, NULL, infoLog);
-				std::cout << "compile fragment shader FAILED!\n" << infoLog << std::endl;
-			}
 
-			break;
+		glGetShaderiv(ss, GL_COMPILE_STATUS, &success);
+		if (!success)
+		{
+			glGetShaderInfoLog(ss, 512, NULL, infoLog);
+			std::cout << str << " : complie shader FAILED!\n" << infoLog << std::endl;
 		}
+
 	}
 
 }

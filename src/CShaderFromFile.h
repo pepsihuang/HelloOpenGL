@@ -6,12 +6,8 @@
 class CShaderFromFile
 {
 public:
-	enum ShaderType {
-		_ST_NULL_,
-		_ST_Vertex_,
-		_ST_Fragment_,
-	};
-	CShaderFromFile(ShaderType type , const char* filepath);
+
+	CShaderFromFile( const char* vefilepath, const char* fragfilepath);
 	~CShaderFromFile();
 
 
@@ -24,8 +20,7 @@ public:
 
 private:
 
-	void CheckCompileErr(unsigned int ss, bool isProgramm);
+	void CheckCompileErr(unsigned int ss, const std::string& str);
 
 	unsigned int m_id;
-	ShaderType m_type;
 };

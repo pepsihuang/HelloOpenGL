@@ -122,12 +122,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\CShaderFromFile.cpp" />
+    <ClCompile Include="..\src\CUseShaderFile.cpp" />
     <ClCompile Include="..\src\glad.c" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\triangle.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\CShaderFromFile.h" />
+    <ClInclude Include="..\src\CUseShaderFile.h" />
     <ClInclude Include="..\src\triangle_shader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

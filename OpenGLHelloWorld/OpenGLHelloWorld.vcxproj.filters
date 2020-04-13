@@ -27,12 +27,18 @@
     <ClCompile Include="..\src\CShaderFromFile.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\CUseShaderFile.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\triangle_shader.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\src\CShaderFromFile.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\CUseShaderFile.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
