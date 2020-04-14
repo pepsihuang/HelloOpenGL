@@ -10,7 +10,7 @@ public:
 	CUseShaderFile();
 	~CUseShaderFile();
 
-	void loadImage(const char* path);
+	unsigned int loadImage(const char* path, bool bTransparency = false);
 	int init();
 	int texture();
 	int triangle();
@@ -31,6 +31,7 @@ private:
 	const unsigned int SCR_HEIGHT = 720;
 	GLFWwindow* m_wnd;
 	unsigned int m_texture; //纹理唯一ID
+	unsigned int m_texture2; //纹理唯一ID
 
 
 };

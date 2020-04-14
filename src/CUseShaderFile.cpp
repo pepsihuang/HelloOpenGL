@@ -39,24 +39,24 @@ CUseShaderFile::~CUseShaderFile()
 	glfwTerminate();
 }
 
-void CUseShaderFile::loadImage(const char* path)
+unsigned int CUseShaderFile::loadImage(const char* path, bool bTransparency)
 {
 	if (!path)
 	{
 		std::cout << "CUseShaderFile::loadImage: image path ERR!" << std::endl;
-		return;
+		return 0;
 	}
 	int width, height, nrChannels;//最后为颜色通道的个数
-	unsigned char* data = stbi_load("../path/wall.jpg", &width, &height, &nrChannels, 0);
+	unsigned char* data = stbi_load(path, &width, &height, &nrChannels, 0);
 	if (!data)
 	{
 		std::cout << "CUseShaderFile::loadImage: FAILED to load texture:" << path << std::endl;
-		return;
+		return 0;
 	}
-	
+	unsigned int texture;
 	//参数一 为生成纹理的数量
-	glGenTextures(1, &m_texture);
-	glBindTexture(GL_TEXTURE_2D, m_texture);
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
 	//为当前绑定的纹理对象设置环绕,过滤方式
 	/*
 	环绕方式	描述
@@ -81,18 +81,18 @@ void CUseShaderFile::loadImage(const char* path)
 	glTexImage2D(
 		GL_TEXTURE_2D, //纹理目标
 		0, //多级渐远纹理的级别，0为基础级别
-		GL_RGB, //期望的纹理存储格式
+		bTransparency ? GL_RGBA : GL_RGB, //期望的纹理存储格式
 		width, //纹理高宽
 		height, 
 		0, //只能为0 OpenGL辣鸡代码
-		GL_RGB, //原图的格式和数据类型
+		bTransparency ? GL_RGBA : GL_RGB, //原图的格式和数据类型
 		GL_UNSIGNED_BYTE, 
 		data);//参数数据
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	//释放纹理
 	stbi_image_free(data);
-
+	return texture;
 }
 
 int CUseShaderFile::init()
@@ -170,7 +170,11 @@ int CUseShaderFile::texture()
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 	glEnableVertexAttribArray(2);
 
-	loadImage("../path/wall.jpg");
+	//由于stb_image库的y起始在底,而一般照片的y起始在顶,所以我们需要修正
+	stbi_set_flip_vertically_on_load(true);
+
+	m_texture = loadImage("../path/wall.jpg");
+	m_texture2 = loadImage("../path/face.png", true);
 
 
 
@@ -229,6 +233,9 @@ void CUseShaderFile::loop_texture()
 {
 	CShaderFromFile shader("../path/tex_shader.vs", "../path/tex_shader.fs");
 
+	shader.use();
+	shader.setInt("ourTexture1", 0);
+	shader.setInt("ourTexture2", 1);
 	//循环渲染
 	while (!glfwWindowShouldClose(m_wnd))
 	{
@@ -237,7 +244,13 @@ void CUseShaderFile::loop_texture()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);//
 
+		//glBindTexture(GL_TEXTURE_2D, m_texture);
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, m_texture);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, m_texture2);
+
+
 
 		shader.use();
 		glBindVertexArray(VAO);
