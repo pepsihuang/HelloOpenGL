@@ -7,5 +7,5 @@ uniform sampler2D ourTexture; //采样器
 
 void main()
 {
-	FragColor = texture(ourTexture, TexCoord);//采样纹理颜色 参数1纹理采样器, 参数2对应纹理坐标
+	FragColor = texture(ourTexture, TexCoord) * vec4(ourColor, 1.0);//采样纹理颜色 参数1纹理采样器, 参数2对应纹理坐标
 }
