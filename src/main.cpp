@@ -12,9 +12,11 @@ int main()
 	//Triangle tri;
 	//TriangleShader tri;
 	CUseShaderFile tri;
-	//tri.init();
 	tri.texture();
 	tri.loop_texture();
+
+	//tri.triangle();
+	//tri.loop();
 	return 0;
 }
 
