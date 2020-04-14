@@ -41,5 +41,22 @@
     <ClInclude Include="..\src\CUseShaderFile.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\stb_image.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\path\Shader.fs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="..\path\Shader.vs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="..\path\tex_shader.vs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="..\path\tex_shader.fs">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
 </Project>
