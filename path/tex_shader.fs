@@ -12,6 +12,6 @@ void main()
 	//FragColor = texture(ourTexture, TexCoord) * vec4(ourColor, 1.0);//后面新增的乘上颜色,就会显示一个混合色
 
 	//mix是根据第三个参数对前两个参数进行线性插值,此处0.4就返回第一个颜色40%+第二个颜色60%的混合色
-	FragColor = mix(texture(ourTexture1, TexCoord), texture(ourTexture2, TexCoord), 0.2);
+	FragColor = mix(texture(ourTexture1, TexCoord), texture(ourTexture2, vec2(1.0 - TexCoord.x, TexCoord.y)), 0.2);
 
 }
