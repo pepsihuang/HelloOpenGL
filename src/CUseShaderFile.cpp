@@ -16,20 +16,25 @@ void CUseShaderFile::framebuffer_size_callback(GLFWwindow* wnd, int width, int h
 
 void CUseShaderFile::processInput(GLFWwindow* wnd)
 {
-	//检查是否按下esc键
 	if (glfwGetKey(wnd, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-	{
-		//关闭窗口QA
 		glfwSetWindowShouldClose(wnd, true);
+	else if (glfwGetKey(wnd, GLFW_KEY_DOWN) == GLFW_PRESS)
+	{
+		m_cur_mix -= 0.1f;
+		m_shader->setFloat("va_mix", m_cur_mix);
+		std::cout << m_cur_mix << std::endl;
+
+	}
+	else if (glfwGetKey(wnd, GLFW_KEY_UP) == GLFW_PRESS)
+	{
+		m_cur_mix += 0.1f;
+		m_shader->setFloat("va_mix", m_cur_mix);
+		std::cout << m_cur_mix << std::endl;
+
 	}
 }
 
-CUseShaderFile::CUseShaderFile() :m_wnd(NULL)
-{
-	init();
-}
-
-CUseShaderFile::~CUseShaderFile()
+void CUseShaderFile::exit()
 {
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
@@ -37,6 +42,18 @@ CUseShaderFile::~CUseShaderFile()
 
 
 	glfwTerminate();
+}
+
+CUseShaderFile::CUseShaderFile() 
+	: m_wnd(NULL)
+	, m_cur_mix(0)
+{
+	init();
+}
+
+CUseShaderFile::~CUseShaderFile()
+{
+
 }
 
 unsigned int CUseShaderFile::loadImage(const char* path, bool bTransparency)
@@ -144,10 +161,10 @@ int CUseShaderFile::texture()
 	//纹理应用点
 	float tex_vertices[] = {
 		//     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
-			 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   0.1f, 0.1f,   // 右上
-			 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   0.1f, 0.0f,   // 右下
+			 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // 右上
+			 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // 右下
 			-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // 左下
-			-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 0.1f    // 左上		
+			-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // 左上		
 	};
 
 	unsigned int indices[] = {
@@ -205,7 +222,7 @@ int CUseShaderFile::triangle()
 void CUseShaderFile::loop()
 {
 
-	CShaderFromFile shader("../path/Shader.vs", "../path/Shader.fs");
+	m_shader = new CShaderFromFile("../path/Shader.vs", "../path/Shader.fs");
 
 	//循环渲染
 	while (!glfwWindowShouldClose(m_wnd))
@@ -215,10 +232,10 @@ void CUseShaderFile::loop()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);//
 
-		shader.use();
+		m_shader->use();
 		double timeValue = glfwGetTime();
 		double Value = (sin(timeValue) / 2.0f);
-		shader.setFloat("xoffset", (float)Value);
+		m_shader->setFloat("xoffset", (float)Value);
 
 		//glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLE_FAN, 0, 3);
@@ -226,16 +243,17 @@ void CUseShaderFile::loop()
 		glfwSwapBuffers(m_wnd);
 		glfwPollEvents();
 	}
-
+	exit();
 }
 
 void CUseShaderFile::loop_texture()
 {
-	CShaderFromFile shader("../path/tex_shader.vs", "../path/tex_shader.fs");
+	m_shader = new CShaderFromFile("../path/tex_shader.vs", "../path/tex_shader.fs");
 
-	shader.use();
-	shader.setInt("ourTexture1", 0);
-	shader.setInt("ourTexture2", 1);
+
+	m_shader->use();
+	m_shader->setInt("ourTexture1", 0);
+	m_shader->setInt("ourTexture2", 1);
 	//循环渲染
 	while (!glfwWindowShouldClose(m_wnd))
 	{
@@ -252,7 +270,7 @@ void CUseShaderFile::loop_texture()
 
 
 
-		shader.use();
+		m_shader->use();
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
@@ -260,6 +278,6 @@ void CUseShaderFile::loop_texture()
 		glfwPollEvents();
 	}
 
-	glfwTerminate();
+	exit();
 
 }
