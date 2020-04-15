@@ -65,8 +65,8 @@ unsigned int CUseShaderFile::loadImage(const char* path, bool bTransparency)
 	GL_CLAMP_TO_EDGE	纹理坐标会被约束在0到1之间，超出的部分会重复纹理坐标的边缘，产生一种边缘被拉伸的效果。
 	GL_CLAMP_TO_BORDER	超出的坐标为用户指定的边缘颜色。
 	*/
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
 	/*
 	过滤方式	描述
 	GL_NEAREST_MIPMAP_NEAREST	使用最邻近的多级渐远纹理来匹配像素大小，并使用邻近插值进行纹理采样
@@ -74,8 +74,8 @@ unsigned int CUseShaderFile::loadImage(const char* path, bool bTransparency)
 	GL_NEAREST_MIPMAP_LINEAR	在两个最匹配像素大小的多级渐远纹理之间进行线性插值，使用邻近插值进行采样
 	GL_LINEAR_MIPMAP_LINEAR		在两个邻近的多级渐远纹理之间使用线性插值，并使用线性插值进行采样
 	*/
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	//把前面载入的图片数据生成一个纹理
 	glTexImage2D(
@@ -144,10 +144,10 @@ int CUseShaderFile::texture()
 	//纹理应用点
 	float tex_vertices[] = {
 		//     ---- 位置 ----       ---- 颜色 ----     - 纹理坐标 -
-			 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // 右上
-			 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // 右下
+			 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   0.1f, 0.1f,   // 右上
+			 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   0.1f, 0.0f,   // 右下
 			-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // 左下
-			-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // 左上		
+			-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 0.1f    // 左上		
 	};
 
 	unsigned int indices[] = {
