@@ -16,20 +16,25 @@ void CUseShaderFile::framebuffer_size_callback(GLFWwindow* wnd, int width, int h
 
 void CUseShaderFile::processInput(GLFWwindow* wnd)
 {
-	//检查是否按下esc键
 	if (glfwGetKey(wnd, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-	{
-		//关闭窗口QA
 		glfwSetWindowShouldClose(wnd, true);
+	else if (glfwGetKey(wnd, GLFW_KEY_DOWN) == GLFW_PRESS)
+	{
+		m_cur_mix -= 0.1f;
+		m_shader->setFloat("va_mix", m_cur_mix);
+		std::cout << m_cur_mix << std::endl;
+
+	}
+	else if (glfwGetKey(wnd, GLFW_KEY_UP) == GLFW_PRESS)
+	{
+		m_cur_mix += 0.1f;
+		m_shader->setFloat("va_mix", m_cur_mix);
+		std::cout << m_cur_mix << std::endl;
+
 	}
 }
 
-CUseShaderFile::CUseShaderFile() :m_wnd(NULL)
-{
-	init();
-}
-
-CUseShaderFile::~CUseShaderFile()
+void CUseShaderFile::exit()
 {
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
@@ -37,6 +42,18 @@ CUseShaderFile::~CUseShaderFile()
 
 
 	glfwTerminate();
+}
+
+CUseShaderFile::CUseShaderFile() 
+	: m_wnd(NULL)
+	, m_cur_mix(0)
+{
+	init();
+}
+
+CUseShaderFile::~CUseShaderFile()
+{
+
 }
 
 unsigned int CUseShaderFile::loadImage(const char* path, bool bTransparency)
@@ -65,8 +82,8 @@ unsigned int CUseShaderFile::loadImage(const char* path, bool bTransparency)
 	GL_CLAMP_TO_EDGE	纹理坐标会被约束在0到1之间，超出的部分会重复纹理坐标的边缘，产生一种边缘被拉伸的效果。
 	GL_CLAMP_TO_BORDER	超出的坐标为用户指定的边缘颜色。
 	*/
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
 	/*
 	过滤方式	描述
 	GL_NEAREST_MIPMAP_NEAREST	使用最邻近的多级渐远纹理来匹配像素大小，并使用邻近插值进行纹理采样
@@ -74,8 +91,8 @@ unsigned int CUseShaderFile::loadImage(const char* path, bool bTransparency)
 	GL_NEAREST_MIPMAP_LINEAR	在两个最匹配像素大小的多级渐远纹理之间进行线性插值，使用邻近插值进行采样
 	GL_LINEAR_MIPMAP_LINEAR		在两个邻近的多级渐远纹理之间使用线性插值，并使用线性插值进行采样
 	*/
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	//把前面载入的图片数据生成一个纹理
 	glTexImage2D(
@@ -205,7 +222,7 @@ int CUseShaderFile::triangle()
 void CUseShaderFile::loop()
 {
 
-	CShaderFromFile shader("../path/Shader.vs", "../path/Shader.fs");
+	m_shader = new CShaderFromFile("../path/Shader.vs", "../path/Shader.fs");
 
 	//循环渲染
 	while (!glfwWindowShouldClose(m_wnd))
@@ -215,10 +232,10 @@ void CUseShaderFile::loop()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);//
 
-		shader.use();
+		m_shader->use();
 		double timeValue = glfwGetTime();
 		double Value = (sin(timeValue) / 2.0f);
-		shader.setFloat("xoffset", (float)Value);
+		m_shader->setFloat("xoffset", (float)Value);
 
 		//glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLE_FAN, 0, 3);
@@ -226,16 +243,17 @@ void CUseShaderFile::loop()
 		glfwSwapBuffers(m_wnd);
 		glfwPollEvents();
 	}
-
+	exit();
 }
 
 void CUseShaderFile::loop_texture()
 {
-	CShaderFromFile shader("../path/tex_shader.vs", "../path/tex_shader.fs");
+	m_shader = new CShaderFromFile("../path/tex_shader.vs", "../path/tex_shader.fs");
 
-	shader.use();
-	shader.setInt("ourTexture1", 0);
-	shader.setInt("ourTexture2", 1);
+
+	m_shader->use();
+	m_shader->setInt("ourTexture1", 0);
+	m_shader->setInt("ourTexture2", 1);
 	//循环渲染
 	while (!glfwWindowShouldClose(m_wnd))
 	{
@@ -252,7 +270,7 @@ void CUseShaderFile::loop_texture()
 
 
 
-		shader.use();
+		m_shader->use();
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
@@ -260,6 +278,6 @@ void CUseShaderFile::loop_texture()
 		glfwPollEvents();
 	}
 
-	glfwTerminate();
+	exit();
 
 }

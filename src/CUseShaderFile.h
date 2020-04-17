@@ -3,6 +3,7 @@
 #include <glad/glad.h>//需要在glfw前 否则会报编译错误
 #include <glfw/glfw3.h>
 #include <iostream>
+#include "CShaderFromFile.h"
 
 
 class CUseShaderFile {
@@ -22,6 +23,7 @@ private:
 	static void framebuffer_size_callback(GLFWwindow*  wnd, int width, int height);
 	void processInput(GLFWwindow* wnd);
 
+	void exit();
 
 
 	unsigned int VBO;
@@ -33,5 +35,7 @@ private:
 	unsigned int m_texture; //纹理唯一ID
 	unsigned int m_texture2; //纹理唯一ID
 
+	CShaderFromFile* m_shader;
 
+	float m_cur_mix;
 };
