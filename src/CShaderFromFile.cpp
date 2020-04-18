@@ -116,11 +116,6 @@ void CShaderFromFile::setFloat(const std::string& name, float value) const
 
 
 
-void CShaderFromFile::setMat4(const std::string& name, const glm::mat4& mat) const
-{
-	//glUniformMatrix4fv(glGetUniformLocation(m_id, name.c_str()), 1, GL_FALSE, &mat[0][0]);
-}
-
 void CShaderFromFile::setMat4(const std::string& name, float value[]) const {
 	glUniformMatrix4fv(glGetUniformLocation(m_id, name.c_str()), 1, GL_FALSE, value);
 }

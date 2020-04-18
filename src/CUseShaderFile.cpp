@@ -86,8 +86,8 @@ unsigned int CUseShaderFile::loadImage(const char* path, bool bTransparency)
 	GL_CLAMP_TO_EDGE	纹理坐标会被约束在0到1之间，超出的部分会重复纹理坐标的边缘，产生一种边缘被拉伸的效果。
 	GL_CLAMP_TO_BORDER	超出的坐标为用户指定的边缘颜色。
 	*/
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	/*
 	过滤方式	描述
 	GL_NEAREST_MIPMAP_NEAREST	使用最邻近的多级渐远纹理来匹配像素大小，并使用邻近插值进行纹理采样
@@ -95,8 +95,8 @@ unsigned int CUseShaderFile::loadImage(const char* path, bool bTransparency)
 	GL_NEAREST_MIPMAP_LINEAR	在两个最匹配像素大小的多级渐远纹理之间进行线性插值，使用邻近插值进行采样
 	GL_LINEAR_MIPMAP_LINEAR		在两个邻近的多级渐远纹理之间使用线性插值，并使用线性插值进行采样
 	*/
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	//把前面载入的图片数据生成一个纹理
 	glTexImage2D(
@@ -359,16 +359,17 @@ void CUseShaderFile::loop_texture_3d()
 	m_shader = new CShaderFromFile("../path/3d_shader.vs", "../path/3d_shader.fs");
 
 	m_shader->use();
-	m_shader->setInt("ourTexture1", 0);
-	m_shader->setInt("ourTexture2", 1);
+	m_shader->setInt("texture1", 0);
+	m_shader->setInt("texture2", 1);
 
+	glEnable(GL_DEPTH_TEST);
 	//循环渲染
 	while (!glfwWindowShouldClose(m_wnd))
 	{
 		processInput(m_wnd);
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);//
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//同时清除深度缓存
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, m_texture);
@@ -385,18 +386,23 @@ void CUseShaderFile::loop_texture_3d()
 		
 		model      = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
 		view       = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+		//角度为45度。
+		//第二个参数定义了屏幕宽高比（aspect ratio），这个值会影响显示到窗口中的物体是原样显示还是被拉伸。
+		//0.1f是近裁剪面，
+		//100.0f是远裁剪面。
 		projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
 		unsigned int modelLoc = glGetUniformLocation(m_shader->GetID(), "model");
-		unsigned int viewLoc = glGetUniformLocation(m_shader->GetID(), "view");
+		unsigned int viewLoc  = glGetUniformLocation(m_shader->GetID(), "view");
 
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &view[0][0]);
 
-		//m_shader->setMat4("projection", projection);
+		//m_shader->setMat4("projection", projection);//官方的这个例子有问题 传递参数编译出错.暂时使用别的方法
 		m_shader->setMat4("projection", glm::value_ptr(projection));
 
 		glBindVertexArray(VAO);
+		//绘制立方体
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		glfwSwapBuffers(m_wnd);
