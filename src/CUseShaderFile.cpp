@@ -275,8 +275,8 @@ void CUseShaderFile::loop_texture()
 		glBindTexture(GL_TEXTURE_2D, m_texture2);
 
 
-		UseMat4(m_shader);
-
+		//UseMat4(m_shader);
+		UseMat4_move(m_shader);
 		m_shader->use();
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -297,14 +297,42 @@ void CUseShaderFile::UseMat4(const CShaderFromFile* shader)
 	
 	glm::mat4 trans;
 
-	//让贴图旋转90°
+	//让贴图旋转90° (glm::radians为将角度转换为弧度)
 	trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
 	//让贴图变成原来的一半大
 	trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
 	
 	unsigned int transformLoc = glGetUniformLocation(shader->GetID(), "transform");
+	//参数:
+	//1.就是uniform的位置值
+	//2.告诉OpenGL我们将发送多少个矩阵,这里为1个
+	//3.为是否希望对我们的矩阵进行置换(是否需要交换矩阵行和列),OpenGL内部矩阵布局叫 列主序.glm也相同.所以保持
+	//4.真正的矩阵参数.
 	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
+
+
+}
+
+void CUseShaderFile::UseMat4_move(const CShaderFromFile * shader)
+{
+	if (!shader)
+		return;
+
+	glm::mat4 trans;
+	//同理这里是单位阵然后加入位移(0.5, -0.5, 0)
+	trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
+	//让图形随着时间进程而旋转
+	//(这里gettime函数返回的是当前运行的秒数,这里是怎么给换算成旋转所需的弧度的?并且在表现中是循环的
+	trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+
+	unsigned int transformLoc = glGetUniformLocation(shader->GetID(), "transform");
+	//参数:
+	//1.就是uniform的位置值
+	//2.告诉OpenGL我们将发送多少个矩阵,这里为1个
+	//3.为是否希望对我们的矩阵进行置换(是否需要交换矩阵行和列),OpenGL内部矩阵布局叫 列主序.glm也相同.所以保持
+	//4.真正的矩阵参数.
+	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
 
 }
