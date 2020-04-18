@@ -6,6 +6,9 @@
 #include "stb_image.h"
 
 
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 
 
@@ -46,9 +49,10 @@ void CUseShaderFile::exit()
 
 CUseShaderFile::CUseShaderFile() 
 	: m_wnd(NULL)
-	, m_cur_mix(0)
+	, m_cur_mix(0.2)
 {
 	init();
+
 }
 
 CUseShaderFile::~CUseShaderFile()
@@ -221,8 +225,8 @@ int CUseShaderFile::triangle()
 
 void CUseShaderFile::loop()
 {
-
 	m_shader = new CShaderFromFile("../path/Shader.vs", "../path/Shader.fs");
+
 
 	//Ñ­»·äÖÈ¾
 	while (!glfwWindowShouldClose(m_wnd))
@@ -248,12 +252,14 @@ void CUseShaderFile::loop()
 
 void CUseShaderFile::loop_texture()
 {
-	m_shader = new CShaderFromFile("../path/tex_shader.vs", "../path/tex_shader.fs");
-
-
+	m_shader = new CShaderFromFile("../path/mat4_shader.vs", "../path/tex_shader.fs");
+	
 	m_shader->use();
 	m_shader->setInt("ourTexture1", 0);
 	m_shader->setInt("ourTexture2", 1);
+
+	m_shader->setFloat("va_mix", m_cur_mix);
+
 	//Ñ­»·äÖÈ¾
 	while (!glfwWindowShouldClose(m_wnd))
 	{
@@ -269,6 +275,7 @@ void CUseShaderFile::loop_texture()
 		glBindTexture(GL_TEXTURE_2D, m_texture2);
 
 
+		UseMat4(m_shader);
 
 		m_shader->use();
 		glBindVertexArray(VAO);
@@ -279,5 +286,22 @@ void CUseShaderFile::loop_texture()
 	}
 
 	exit();
+
+}
+
+
+void CUseShaderFile::UseMat4(const CShaderFromFile* shader)
+{
+	if (!shader)
+		return;
+	
+	glm::mat4 trans;
+	trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
+	trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
+	
+	unsigned int transformLoc = glGetUniformLocation(shader->GetID(), "transform");
+	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
+
+
 
 }

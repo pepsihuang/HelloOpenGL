@@ -17,7 +17,7 @@ public:
 
 
 	void use();
-
+	unsigned int GetID() const { return m_id; }
 private:
 
 	void CheckCompileErr(unsigned int ss, const std::string& str);

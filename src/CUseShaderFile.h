@@ -18,6 +18,7 @@ public:
 
 	void loop();
 	void loop_texture();
+	void UseMat4(const CShaderFromFile* shader);
 private:
 
 	static void framebuffer_size_callback(GLFWwindow*  wnd, int width, int height);

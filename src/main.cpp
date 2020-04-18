@@ -28,13 +28,17 @@ int main()
 {
 	//Triangle tri;
 	//TriangleShader tri;
-	//CUseShaderFile tri;
-	//tri.texture();
-	//tri.loop_texture();
+
+	CUseShaderFile tri;
+	tri.texture();
+	tri.loop_texture();
 
 	//tri.triangle();
 	//tri.loop();
-	UseGlm();
+
+	//UseGlm();
+
+
 	return 0;
 }
 
