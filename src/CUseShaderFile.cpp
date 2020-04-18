@@ -296,7 +296,10 @@ void CUseShaderFile::UseMat4(const CShaderFromFile* shader)
 		return;
 	
 	glm::mat4 trans;
+
+	//让贴图旋转90°
 	trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
+	//让贴图变成原来的一半大
 	trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
 	
 	unsigned int transformLoc = glGetUniformLocation(shader->GetID(), "transform");
