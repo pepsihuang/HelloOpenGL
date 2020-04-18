@@ -30,15 +30,15 @@ int main()
 	//TriangleShader tri;
 
 	CUseShaderFile tri;
-	tri.texture();
-	tri.loop_texture();
+	//tri.texture();
+	//tri.loop_texture();
 
 	//tri.triangle();
 	//tri.loop();
 
 	//UseGlm();
 
-
+	tri.loop_texture_3d();
 	return 0;
 }
 

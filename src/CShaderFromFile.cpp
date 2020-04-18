@@ -4,6 +4,7 @@
 #include <string>
 #include <sstream>
 #include <iostream>
+#include "../include/glad/glad.h"
 
 
 
@@ -36,7 +37,7 @@ CShaderFromFile::CShaderFromFile(const char* vefilepath, const char* fragfilepat
 	}
 	catch(std::ifstream::failure& e)
 	{
-		std::cout << " FILE OPEN FAILED!" << std::endl;
+		std::cout << " FILE OPEN FAILED! "<<e.code() << std::endl;
 	}
 	const char* char_codev = codev.c_str();
 	const char* char_codef = codef.c_str();
@@ -115,4 +116,11 @@ void CShaderFromFile::setFloat(const std::string& name, float value) const
 
 
 
+void CShaderFromFile::setMat4(const std::string& name, const glm::mat4& mat) const
+{
+	//glUniformMatrix4fv(glGetUniformLocation(m_id, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+}
 
+void CShaderFromFile::setMat4(const std::string& name, float value[]) const {
+	glUniformMatrix4fv(glGetUniformLocation(m_id, name.c_str()), 1, GL_FALSE, value);
+}

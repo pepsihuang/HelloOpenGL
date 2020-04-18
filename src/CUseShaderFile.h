@@ -15,9 +15,13 @@ public:
 	int init();
 	int texture();
 	int triangle();
+	
+	int texture_3d();
 
 	void loop();
 	void loop_texture();
+	void loop_texture_3d();
+
 	void UseMat4(const CShaderFromFile* shader);
 	void UseMat4_move(const CShaderFromFile* shader);
 private:

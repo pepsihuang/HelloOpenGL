@@ -61,5 +61,11 @@
     <None Include="..\path\mat4_shader.vs">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="..\path\3d_shader.vs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="..\path\3d_shader.fs">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
 </Project>

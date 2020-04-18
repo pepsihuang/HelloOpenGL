@@ -49,7 +49,7 @@ void CUseShaderFile::exit()
 
 CUseShaderFile::CUseShaderFile() 
 	: m_wnd(NULL)
-	, m_cur_mix(0.2)
+	, m_cur_mix(0.2f)
 {
 	init();
 
@@ -197,10 +197,6 @@ int CUseShaderFile::texture()
 	m_texture = loadImage("../path/wall.jpg");
 	m_texture2 = loadImage("../path/face.png", true);
 
-
-
-
-
 	return 0;
 
 }
@@ -220,6 +216,73 @@ int CUseShaderFile::triangle()
 	//5,属性跨度 即数组中每三个为一组
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+	return 0;
+}
+
+int CUseShaderFile::texture_3d()
+{
+
+	float vertices[] = {
+	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+	};
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW );
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
+
+
+	//由于stb_image库的y起始在底,而一般照片的y起始在顶,所以我们需要修正
+	stbi_set_flip_vertically_on_load(true);
+
+	m_texture = loadImage("../path/wall.jpg");
+	m_texture2 = loadImage("../path/face.png", true);
+
+
 	return 0;
 }
 
@@ -289,6 +352,57 @@ void CUseShaderFile::loop_texture()
 
 }
 
+
+void CUseShaderFile::loop_texture_3d()
+{
+	texture_3d();
+	m_shader = new CShaderFromFile("../path/3d_shader.vs", "../path/3d_shader.fs");
+
+	m_shader->use();
+	m_shader->setInt("ourTexture1", 0);
+	m_shader->setInt("ourTexture2", 1);
+
+	//循环渲染
+	while (!glfwWindowShouldClose(m_wnd))
+	{
+		processInput(m_wnd);
+
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);//
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, m_texture);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, m_texture2);
+
+
+		m_shader->use();
+		
+		//创建变换矩阵
+		glm::mat4 model      = glm::mat4(1.0f);
+		glm::mat4 view       = glm::mat4(1.0f);
+		glm::mat4 projection = glm::mat4(1.0f);
+		
+		model      = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
+		view       = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+		projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+
+		unsigned int modelLoc = glGetUniformLocation(m_shader->GetID(), "model");
+		unsigned int viewLoc = glGetUniformLocation(m_shader->GetID(), "view");
+
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &view[0][0]);
+
+		//m_shader->setMat4("projection", projection);
+		m_shader->setMat4("projection", glm::value_ptr(projection));
+
+		glBindVertexArray(VAO);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		glfwSwapBuffers(m_wnd);
+		glfwPollEvents();
+	}
+}
 
 void CUseShaderFile::UseMat4(const CShaderFromFile* shader)
 {

@@ -134,6 +134,8 @@
     <ClInclude Include="..\src\triangle_shader.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\path\3d_shader.fs" />
+    <None Include="..\path\3d_shader.vs" />
     <None Include="..\path\mat4_shader.vs" />
     <None Include="..\path\Shader.fs" />
     <None Include="..\path\Shader.vs" />
