@@ -38,7 +38,7 @@ int main()
 
 	//UseGlm();
 
-	tri.loop_texture_3d();
+	tri.loop_texture_3ds();
 	return 0;
 }
 
