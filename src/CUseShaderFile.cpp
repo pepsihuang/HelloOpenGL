@@ -19,6 +19,8 @@ void CUseShaderFile::framebuffer_size_callback(GLFWwindow* wnd, int width, int h
 
 void CUseShaderFile::processInput(GLFWwindow* wnd)
 {
+
+	float cameraSpeed = 0.05f;//合理调整
 	if (glfwGetKey(wnd, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(wnd, true);
 	else if (glfwGetKey(wnd, GLFW_KEY_DOWN) == GLFW_PRESS)
@@ -35,6 +37,44 @@ void CUseShaderFile::processInput(GLFWwindow* wnd)
 		std::cout << m_cur_mix << std::endl;
 
 	}
+	//在前后移动中: front中是z方向有数值,所以直接乘上移动量即可
+	else if (glfwGetKey(wnd, GLFW_KEY_W) == GLFW_PRESS)
+	{
+		cameraPos += cameraSpeed * cameraFront;
+		print("cam", cameraPos);
+
+	}
+	else if (glfwGetKey(wnd, GLFW_KEY_S) == GLFW_PRESS)
+	{
+		cameraPos -= cameraSpeed * cameraFront;
+		print("cam", cameraPos);
+
+	}
+	//在左右移动中: 使用叉乘获得一个右向量,并沿着这个向量移动,从而获得横向移动的效果
+	//这里使用normalize标准化操作,是为了移动变成匀速的
+	else if (glfwGetKey(wnd, GLFW_KEY_A) == GLFW_PRESS)
+	{
+		cameraPos -= cameraSpeed * glm::normalize(glm::cross(cameraFront, cameraUp));
+		print("cam", cameraPos);
+
+	}
+	else if (glfwGetKey(wnd, GLFW_KEY_D) == GLFW_PRESS)
+	{
+		cameraPos += cameraSpeed * glm::normalize(glm::cross(cameraFront, cameraUp));
+		print("cam", cameraPos);
+	}
+	//自己尝试修改Y方向,(上下)
+	else if (glfwGetKey(wnd, GLFW_KEY_Z) == GLFW_PRESS)
+	{
+		cameraPos -= cameraSpeed * cameraUp;
+		print("cam", cameraPos);
+	}
+	else if (glfwGetKey(wnd, GLFW_KEY_C) == GLFW_PRESS)
+	{
+		cameraPos += cameraSpeed * cameraUp;
+		print("cam", cameraPos);
+	}
+
 }
 
 void CUseShaderFile::exit()
@@ -47,11 +87,19 @@ void CUseShaderFile::exit()
 	glfwTerminate();
 }
 
+void CUseShaderFile::print(const std::string& str, const glm::vec3& vec)
+{
+	std::cout << str << " " << vec.x << " " << vec.y << " " << vec.z << std::endl;
+}
+
 CUseShaderFile::CUseShaderFile() 
 	: m_wnd(NULL)
 	, m_cur_mix(0.2f)
 {
 	init();
+	cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);//相机位置
+	cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);//相机的方向向量 (相机位置+方向向量=目标位置)
+	cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);//相机上向量
 
 }
 
@@ -489,6 +537,87 @@ void CUseShaderFile::loop_texture_3ds()
 			glm::vec3(camX, 0.0f, camZ), //相机位置
 			glm::vec3(0.0f, 0.0f, 0.0f), //目标位置
 			glm::vec3(0.0f, 1.0f, 0.0f));//上向量
+
+		m_shader->setMat4("view", glm::value_ptr(view));
+
+		glfwSwapBuffers(m_wnd);
+		glfwPollEvents();
+	}
+
+}
+
+
+
+
+void CUseShaderFile::loop_key_move_cam()
+{
+	texture_3d();
+	m_shader = new CShaderFromFile("../path/3d_shader.vs", "../path/3d_shader.fs");
+
+	m_shader->use();
+	m_shader->setInt("texture1", 0);
+	m_shader->setInt("texture2", 1);
+
+	glEnable(GL_DEPTH_TEST);
+
+	//十个立方体
+	glm::vec3 cubePositions[] = {
+	  glm::vec3(0.0f,  0.0f,  0.0f),
+	  glm::vec3(2.0f,  5.0f, -15.0f),
+	  glm::vec3(-1.5f, -2.2f, -2.5f),
+	  glm::vec3(-3.8f, -2.0f, -12.3f),
+	  glm::vec3(2.4f, -0.4f, -3.5f),
+
+	  glm::vec3(-1.7f,  3.0f, -7.5f),
+	  glm::vec3(1.3f, -2.0f, -2.5f),
+	  glm::vec3(1.5f,  2.0f, -2.5f),
+	  glm::vec3(1.5f,  0.2f, -1.5f),
+	  glm::vec3(-1.3f,  1.0f, -1.5f)
+	};
+
+
+	glm::mat4 view;
+	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -4.0f));
+
+	glm::mat4 projection;
+	projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+
+	//循环渲染
+	while (!glfwWindowShouldClose(m_wnd))
+	{
+		processInput(m_wnd);
+
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//同时清除深度缓存
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, m_texture);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, m_texture2);
+
+
+		m_shader->use();
+
+		m_shader->setMat4("projection", glm::value_ptr(projection));
+
+		glBindVertexArray(VAO);
+
+		for (unsigned int i = 0; i < 10; ++i)
+		{
+			glm::mat4 model;
+			model = glm::translate(model, cubePositions[i]);
+
+			float angle = 20.0f *i;
+			model = glm::rotate(model, angle, glm::vec3(1.0f, 0.3f, 0.5f));
+			m_shader->setMat4("model", glm::value_ptr(model));
+			//绘制立方体
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
+
+		view = glm::lookAt(
+			cameraPos, //相机位置
+			cameraPos + cameraFront, //目标位置
+			cameraUp);//上向量
 
 		m_shader->setMat4("view", glm::value_ptr(view));
 

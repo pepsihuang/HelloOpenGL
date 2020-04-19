@@ -38,7 +38,9 @@ int main()
 
 	//UseGlm();
 
-	tri.loop_texture_3ds();
+	//tri.loop_texture_3ds();
+	tri.loop_key_move_cam();
+	
 	return 0;
 }
 

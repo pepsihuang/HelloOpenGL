@@ -23,6 +23,8 @@ public:
 	void loop_texture_3d();
 	//多个旋转立方体
 	void loop_texture_3ds();
+	//使用键盘操作移动相机
+	void loop_key_move_cam();
 
 	void UseMat4(const CShaderFromFile* shader);
 	void UseMat4_move(const CShaderFromFile* shader);
@@ -32,6 +34,7 @@ private:
 	void processInput(GLFWwindow* wnd);
 
 	void exit();
+	void print(const std::string& str, const glm::vec3& vec);
 
 
 	unsigned int VBO;
@@ -46,4 +49,9 @@ private:
 	CShaderFromFile* m_shader;
 
 	float m_cur_mix;
+
+
+	glm::vec3 cameraPos;
+	glm::vec3 cameraFront;
+	glm::vec3 cameraUp;
 };
