@@ -463,21 +463,34 @@ void CUseShaderFile::loop_texture_3ds()
 
 		m_shader->use();
 
-		m_shader->setMat4("view", glm::value_ptr(view));
 		m_shader->setMat4("projection", glm::value_ptr(projection));
 
 		glBindVertexArray(VAO);
 
-		float angle = (float)glfwGetTime()/*20.0f *i*/;
 		for (unsigned int i = 0; i < 10; ++i)
 		{
 			glm::mat4 model;
 			model = glm::translate(model, cubePositions[i]);
+
+			float angle = 20.0f *i;
 			model = glm::rotate(model, angle, glm::vec3(1.0f, 0.3f, 0.5f));
 			m_shader->setMat4("model", glm::value_ptr(model));
 			//绘制立方体
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
+		//圆的半径
+		float radius = 5.0f;
+		float camX = sin(glfwGetTime()) * radius;//
+		float camZ = cos(glfwGetTime()) * radius;//
+		std::cout <<"time: "<< glfwGetTime() << "camx: " << camX << " camz: " << camZ << std::endl;
+		glm::mat4 view;
+		//
+		view = glm::lookAt(
+			glm::vec3(camX, 0.0f, camZ), //相机位置
+			glm::vec3(0.0f, 0.0f, 0.0f), //目标位置
+			glm::vec3(0.0f, 1.0f, 0.0f));//上向量
+
+		m_shader->setMat4("view", glm::value_ptr(view));
 
 		glfwSwapBuffers(m_wnd);
 		glfwPollEvents();
