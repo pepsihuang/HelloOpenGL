@@ -468,12 +468,12 @@ void CUseShaderFile::loop_texture_3ds()
 
 		glBindVertexArray(VAO);
 
+		float angle = (float)glfwGetTime()/*20.0f *i*/;
 		for (unsigned int i = 0; i < 10; ++i)
 		{
 			glm::mat4 model;
 			model = glm::translate(model, cubePositions[i]);
-			float angle = 20.0f *i;
-			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			model = glm::rotate(model, angle, glm::vec3(1.0f, 0.3f, 0.5f));
 			m_shader->setMat4("model", glm::value_ptr(model));
 			//绘制立方体
 			glDrawArrays(GL_TRIANGLES, 0, 36);
