@@ -32,6 +32,8 @@ private:
 
 	static void framebuffer_size_callback(GLFWwindow*  wnd, int width, int height);
 	void processInput(GLFWwindow* wnd);
+	static void mouse_callback(GLFWwindow* wnd, double xpos, double ypos);
+	
 
 	void exit();
 	void print(const std::string& str, const glm::vec3& vec);
@@ -54,4 +56,25 @@ private:
 	glm::vec3 cameraPos;
 	glm::vec3 cameraFront;
 	glm::vec3 cameraUp;
+
+	//当前帧与上一帧的时间差
+	float m_deltaTime;
+	//上一帧的结束时间
+	float m_lastTime;
+	//使用每帧时间差来进行统一化速度,避免不同性能电脑导致帧率不同而移动速度不同
+	//我们使得在固定的时间长度下,移动的速度是相同的
+
+	//加入鼠标移动相机的俯仰角和偏航角
+private:
+	//是否首次鼠标进入
+	bool m_first_mouse;
+
+	double m_lastX;
+	double m_lastY;
+	float m_yaw;
+	float m_pitch;
+
+
+
+	//static CUseShaderFile* m_ins;
 };

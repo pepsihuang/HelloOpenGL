@@ -10,7 +10,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
-
+CUseShaderFile * m_ins;
 
 void CUseShaderFile::framebuffer_size_callback(GLFWwindow* wnd, int width, int height)
 {
@@ -20,7 +20,7 @@ void CUseShaderFile::framebuffer_size_callback(GLFWwindow* wnd, int width, int h
 void CUseShaderFile::processInput(GLFWwindow* wnd)
 {
 
-	float cameraSpeed = 0.05f;//合理调整
+	float cameraSpeed = 0.5f * m_deltaTime;//合理调整
 	if (glfwGetKey(wnd, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(wnd, true);
 	else if (glfwGetKey(wnd, GLFW_KEY_DOWN) == GLFW_PRESS)
@@ -77,6 +77,42 @@ void CUseShaderFile::processInput(GLFWwindow* wnd)
 
 }
 
+void CUseShaderFile::mouse_callback(GLFWwindow* wnd, double xpos, double ypos)
+{
+	
+	if (m_ins->m_first_mouse)
+	{
+		//m_ins->m_lastX = xpos;
+		//m_ins->m_lastY = ypos;
+		m_ins->m_first_mouse = false;
+		std::cout << "mouse begin..." << std::endl;
+	}
+
+	float xoffset = xpos - m_ins->m_lastX;
+	float yoffset = m_ins->m_lastY - ypos;
+	m_ins->m_lastX = xpos;
+	m_ins->m_lastY = ypos;
+
+	float sensitivity = 0.03f;
+	xoffset *= sensitivity;
+	yoffset *= sensitivity;
+	
+	m_ins->m_yaw += xoffset;
+	m_ins->m_pitch += yoffset;
+
+	if (m_ins->m_pitch > 89.0f)
+		m_ins->m_pitch = 89.0f;
+	if (m_ins->m_pitch < -89.0f)
+		m_ins->m_pitch = -89.0f;
+
+	glm::vec3 front;
+	front.x = cos(glm::radians(m_ins->m_yaw)) * cos(glm::radians(m_ins->m_pitch));
+	front.y = sin(glm::radians(m_ins->m_pitch));
+	front.z = sin(glm::radians(m_ins->m_yaw)) * cos(glm::radians(m_ins->m_pitch));
+	m_ins->cameraFront = glm::normalize(front);
+
+}
+
 void CUseShaderFile::exit()
 {
 	glDeleteVertexArrays(1, &VAO);
@@ -95,12 +131,19 @@ void CUseShaderFile::print(const std::string& str, const glm::vec3& vec)
 CUseShaderFile::CUseShaderFile() 
 	: m_wnd(NULL)
 	, m_cur_mix(0.2f)
+	, m_deltaTime(0.0f)
+	, m_lastTime(0.0f)
+	, m_first_mouse(true)
+	, m_lastX((float)SCR_WIDTH  / 2)
+	, m_lastY((float)SCR_HEIGHT / 2)
+	, m_pitch(0.0f)
+	, m_yaw(0.0f)
 {
 	init();
 	cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);//相机位置
 	cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);//相机的方向向量 (相机位置+方向向量=目标位置)
 	cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);//相机上向量
-
+	m_ins = this;
 }
 
 CUseShaderFile::~CUseShaderFile()
@@ -194,6 +237,8 @@ int CUseShaderFile::init()
 	}
 	//注册窗口回调
 	glfwSetFramebufferSizeCallback(m_wnd, framebuffer_size_callback);
+
+
 
 	//生成唯一id
 	glGenVertexArrays(1, &VAO);
@@ -551,6 +596,16 @@ void CUseShaderFile::loop_texture_3ds()
 
 void CUseShaderFile::loop_key_move_cam()
 {
+
+	//注册鼠标移动的回调
+	glfwSetCursorPosCallback(m_wnd, mouse_callback);
+	//隐藏鼠标的指针光标
+	glfwSetInputMode(m_wnd, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+
+	float curTime = glfwGetTime();
+	m_deltaTime = curTime - m_lastTime;
+	m_lastTime = curTime;
 	texture_3d();
 	m_shader = new CShaderFromFile("../path/3d_shader.vs", "../path/3d_shader.fs");
 
