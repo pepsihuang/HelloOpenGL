@@ -14,12 +14,47 @@ namespace HDAN_COLOR {
 	#include "CShaderFromFile.h"
 	#include "Camera.h"
 
+	void framebuffer_size_callback(GLFWwindow*  wnd, int width, int height);
+	void processInput(GLFWwindow* wnd);
+	void mouse_callback(GLFWwindow* wnd, double xpos, double ypos);
+	void scroll_callback(GLFWwindow* wnd, double xoffset, double yoffset);
 
+	const unsigned int SCR_WIDTH = 1280;
+	const unsigned int SCR_HEIGHT = 720;
+
+	Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+	float lastX = SCR_WIDTH / 2;
+	float lastY = SCR_HEIGHT / 2;
+	bool firstMouse = true;
+
+	
 	void funcmain()
 	{
 		CShaderFromFile shader("path/shader.vs", "path/shader.vs");
 		Camera cam(glm::vec3(0.0f, 0.0f, 3.0f));
 		std::cout<<"funcmain"<<std::endl;
+	
+	}
+
+
+
+	void framebuffer_size_callback(GLFWwindow*  wnd, int width, int height)
+	{
+
+	}
+
+	void processInput(GLFWwindow* wnd)
+	{
+
+	}
+
+	void mouse_callback(GLFWwindow* wnd, double xpos, double ypos)
+	{
+
+	}
+	void scroll_callback(GLFWwindow* wnd, double xoffset, double yoffset)
+	{
+
 	}
 
 };
