@@ -3,20 +3,21 @@
 
 
 
+
 Camera::Camera(
-	  glm::vec3 pos /*= glm::vec3(0.0f, 0.0f, 0.0f) */
-	, glm::vec3 up /*= glm::vec3(0.0f, 1.0f, 0.0f) */
-	, float yaw /*= YAW */
-	, float pitch /*= PITCH */)
-	: m_Position(pos)
-	, m_WorldUp(up)
-	, m_Yaw(yaw)
-	, m_Pitch(pitch)
-	, m_Front(glm::vec3(0.0f, 0.0f, -1.0f))
-	, m_MovementSpeed(SPEED)
-	, m_MouseSensitivity(SENSITIVITY)
-	, m_Zoom(ZOOM)
+	glm::vec3 pos 
+	, glm::vec3 up
+	, float yaw
+	, float pitch)
 {
+	m_Position = pos;
+	m_WorldUp = up;
+	m_Yaw = yaw;
+	m_Pitch = pitch;
+	m_Front = glm::vec3(0.0f, 0.0f, -1.0f);
+	m_MovementSpeed = SPEED;
+	m_MouseSensitivity = SENSITIVITY;
+	m_Zoom = ZOOM;
 }
 
 Camera::~Camera()

@@ -8,6 +8,7 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
+#include "color.h"
 
 
 void UseGlm()
@@ -29,7 +30,7 @@ int main()
 	//Triangle tri;
 	//TriangleShader tri;
 
-	CUseShaderFile tri;
+	//CUseShaderFile tri;
 	//tri.texture();
 	//tri.loop_texture();
 
@@ -39,8 +40,8 @@ int main()
 	//UseGlm();
 
 	//tri.loop_texture_3ds();
-	tri.loop_key_move_cam();
-	
+	//tri.loop_key_move_cam();
+	HDAN_COLOR::funcmain();
 	return 0;
 }
 
