@@ -88,8 +88,8 @@ void CUseShaderFile::mouse_callback1(GLFWwindow* wnd, double xpos, double ypos)
 		std::cout << "mouse begin..." << std::endl;
 	}
 
-	float xoffset = xpos - m_ins->m_lastX;
-	float yoffset = m_ins->m_lastY - ypos;
+	double xoffset = xpos - m_ins->m_lastX;
+	double yoffset = m_ins->m_lastY - ypos;
 	m_ins->m_lastX = xpos;
 	m_ins->m_lastY = ypos;
 

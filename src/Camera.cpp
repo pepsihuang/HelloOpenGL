@@ -18,6 +18,8 @@ Camera::Camera(
 	m_MovementSpeed = SPEED;
 	m_MouseSensitivity = SENSITIVITY;
 	m_Zoom = ZOOM;
+
+	updateCameraVectors();
 }
 
 Camera::~Camera()
@@ -75,7 +77,7 @@ void Camera::updateCameraVectors()
 	glm::vec3 front;
 	front.x = cos(glm::radians(m_Yaw)) * cos(glm::radians(m_Pitch));
 	front.y = sin(glm::radians(m_Pitch));
-	front.z = cos(glm::radians(m_Yaw)) * cos(glm::radians(m_Pitch));
+	front.z = sin(glm::radians(m_Yaw)) * cos(glm::radians(m_Pitch));
 	m_Front = glm::normalize(front);
 
 	//重新计算右向量 和 上向量
@@ -89,12 +91,12 @@ void Camera::updateCameraVectors()
 
 void Camera::ProcessMouseScroll(float offset)
 {
-	if (m_Zoom >= 1.0f && m_Zoom <= 45.0f)
+	//if (m_Zoom >= 1.0f && m_Zoom <= 45.0f)
 		m_Zoom -= offset;
 
-	if (m_Zoom <= 1.0f)
-		m_Zoom = 1.0f;
-	if (m_Zoom >= 45.0f)
-		m_Zoom = 45.0f;
+// 	if (m_Zoom <= 1.0f)
+// 		m_Zoom = 1.0f;
+// 	if (m_Zoom >= 45.0f)
+// 		m_Zoom = 45.0f;
 
 }

@@ -31,7 +31,7 @@ private:
 
 	void processInput(GLFWwindow* wnd);
 
-private:
+protected:
 
 	unsigned int VBO;
 	unsigned int VAO;
