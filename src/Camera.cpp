@@ -1,4 +1,5 @@
 #include "Camera.h"
+#include <iostream>
 
 
 
@@ -83,7 +84,7 @@ void Camera::updateCameraVectors()
 	//重新计算右向量 和 上向量
 
 	m_Right = glm::normalize(glm::cross(m_Front, m_WorldUp));
-	m_Up = glm::normalize(glm::cross(m_Right, front));
+	m_Up = glm::normalize(glm::cross(m_Right, m_Front));
 	//标准化向量，因为他们的长度更接近于0，甚于你缓慢的上下看的结果。。。。翻译有点诡异
 	// Normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
 }
@@ -91,7 +92,7 @@ void Camera::updateCameraVectors()
 
 void Camera::ProcessMouseScroll(float offset)
 {
-	//if (m_Zoom >= 1.0f && m_Zoom <= 45.0f)
+//	if (m_Zoom >= 1.0f && m_Zoom <= 45.0f)
 		m_Zoom -= offset;
 
 // 	if (m_Zoom <= 1.0f)
@@ -99,4 +100,5 @@ void Camera::ProcessMouseScroll(float offset)
 // 	if (m_Zoom >= 45.0f)
 // 		m_Zoom = 45.0f;
 
+	std::cout << "cam zoom: " << m_Zoom <<std::endl;
 }

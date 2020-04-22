@@ -45,7 +45,7 @@ private:
 		// timing
 		deltaTime = 0.0f;	// time between current frame and last frame
 		lastFrame = 0.0f;
-		camera.m_Position = glm::vec3(0.0f, 0.0f, 3.0f);
+		camera.m_Position = glm::vec3(0.0f, 0.0f, 7.0f);
 		firstMouse = true;
 		//µÆ¹âµÄÎ»ÖÃ
 		lightPos = glm::vec3(1.2f, 1.0f, 2.0f);
