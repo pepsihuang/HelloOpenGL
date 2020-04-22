@@ -12,12 +12,12 @@
 
 CUseShaderFile * m_ins;
 
-void CUseShaderFile::framebuffer_size_callback(GLFWwindow* wnd, int width, int height)
+void CUseShaderFile::framebuffer_size_callback1(GLFWwindow* wnd, int width, int height)
 {
 	glViewport(0, 0, width, height);//调整视窗区域
 }
 
-void CUseShaderFile::processInput(GLFWwindow* wnd)
+void CUseShaderFile::processInput1(GLFWwindow* wnd)
 {
 
 	float cameraSpeed = 0.5f * m_deltaTime;//合理调整
@@ -77,7 +77,7 @@ void CUseShaderFile::processInput(GLFWwindow* wnd)
 
 }
 
-void CUseShaderFile::mouse_callback(GLFWwindow* wnd, double xpos, double ypos)
+void CUseShaderFile::mouse_callback1(GLFWwindow* wnd, double xpos, double ypos)
 {
 	
 	if (m_ins->m_first_mouse)
@@ -236,7 +236,7 @@ int CUseShaderFile::init()
 		return -1;
 	}
 	//注册窗口回调
-	glfwSetFramebufferSizeCallback(m_wnd, framebuffer_size_callback);
+	glfwSetFramebufferSizeCallback(m_wnd, framebuffer_size_callback1);
 
 
 
@@ -387,7 +387,7 @@ void CUseShaderFile::loop()
 	//循环渲染
 	while (!glfwWindowShouldClose(m_wnd))
 	{
-		processInput(m_wnd);
+		processInput1(m_wnd);
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);//
@@ -419,7 +419,7 @@ void CUseShaderFile::loop_texture()
 	//循环渲染
 	while (!glfwWindowShouldClose(m_wnd))
 	{
-		processInput(m_wnd);
+		processInput1(m_wnd);
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);//
@@ -460,7 +460,7 @@ void CUseShaderFile::loop_texture_3d()
 	//循环渲染
 	while (!glfwWindowShouldClose(m_wnd))
 	{
-		processInput(m_wnd);
+		processInput1(m_wnd);
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//同时清除深度缓存
@@ -543,7 +543,7 @@ void CUseShaderFile::loop_texture_3ds()
 	//循环渲染
 	while (!glfwWindowShouldClose(m_wnd))
 	{
-		processInput(m_wnd);
+		processInput1(m_wnd);
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//同时清除深度缓存
@@ -598,7 +598,7 @@ void CUseShaderFile::loop_key_move_cam()
 {
 
 	//注册鼠标移动的回调
-	glfwSetCursorPosCallback(m_wnd, mouse_callback);
+	glfwSetCursorPosCallback(m_wnd, mouse_callback1);
 	//隐藏鼠标的指针光标
 	glfwSetInputMode(m_wnd, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
@@ -640,7 +640,7 @@ void CUseShaderFile::loop_key_move_cam()
 	//循环渲染
 	while (!glfwWindowShouldClose(m_wnd))
 	{
-		processInput(m_wnd);
+		processInput1(m_wnd);
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//同时清除深度缓存

@@ -33,6 +33,12 @@
     <ClCompile Include="..\src\Camera.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\CBase.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Global.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\triangle_shader.h">
@@ -47,10 +53,16 @@
     <ClInclude Include="..\include\stb_image.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\color.h">
+    <ClInclude Include="..\src\Camera.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Camera.h">
+    <ClInclude Include="..\src\Global.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\CBase.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\CColor.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

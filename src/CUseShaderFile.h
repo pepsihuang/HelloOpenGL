@@ -30,9 +30,9 @@ public:
 	void UseMat4_move(const CShaderFromFile* shader);
 private:
 
-	static void framebuffer_size_callback(GLFWwindow*  wnd, int width, int height);
-	void processInput(GLFWwindow* wnd);
-	static void mouse_callback(GLFWwindow* wnd, double xpos, double ypos);
+	static void framebuffer_size_callback1(GLFWwindow*  wnd, int width, int height);
+	void processInput1(GLFWwindow* wnd);
+	static void mouse_callback1(GLFWwindow* wnd, double xpos, double ypos);
 	
 
 	void exit();
