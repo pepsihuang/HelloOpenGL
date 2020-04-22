@@ -51,6 +51,8 @@ int CBase::init()
 	glfwSetCursorPosCallback(m_wnd, ::mouse_callback);
 	glfwSetScrollCallback(m_wnd, ::scroll_callback);
 
+	//捕捉鼠标
+	glfwSetInputMode(m_wnd, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	//生成唯一id
 	glGenVertexArrays(1, &VAO);

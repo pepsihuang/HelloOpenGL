@@ -39,7 +39,7 @@ public:
 	void ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch);
 
 	void ProcessMouseScroll(float offset);
-private:
+
 	void updateCameraVectors();
 	//œ‡ª˙ Ù–‘
 	glm::vec3 m_Position;
