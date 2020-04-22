@@ -97,5 +97,8 @@
     <None Include="..\path\color.vs">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="..\path\lamp.vs">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
 </Project>

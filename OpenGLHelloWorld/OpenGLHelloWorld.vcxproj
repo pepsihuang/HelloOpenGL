@@ -146,6 +146,7 @@
     <None Include="..\path\color.fs" />
     <None Include="..\path\color.vs" />
     <None Include="..\path\lamp.fs" />
+    <None Include="..\path\lamp.vs" />
     <None Include="..\path\mat4_shader.vs" />
     <None Include="..\path\Shader.fs" />
     <None Include="..\path\Shader.vs" />

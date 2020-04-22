@@ -8,16 +8,30 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
+/*
+光照-颜色
+这里的实现 实际只是绘制了两个立方体,然后给两个立方体指定颜色
+第一个橘黄色立方体:
+是使用珊瑚红 和 白色混合从而模拟出物体反射颜色的原理.就像现实生活中白色光打在任何颜色物体上反射出来的就是物体不吸收的颜色
+即:向量点乘模拟现实光照反射效果
+
+第二个纯白色立方体:
+模拟光源本身的,用这个立方体来代表光本体,就像现实生活中的灯泡/太阳
+
+给白色立方体单独建立一个着色器的目的是为了给它单独设置颜色,从而后面再在修改物体本身颜色时 保持白色立方体(光源)的独立.
+所以在lamp.fs中就很简单的写死了全是1.0向量的白色.
+
+
+*/
+
 
 class CColor : public CBase
 {
 public:
 	CColor() 
 		:lightShader("../path/color.vs", "../path/color.fs")
-		,lampShader("../path/color.vs", "../path/lamp.fs")
+		,lampShader("../path/lamp.vs", "../path/lamp.fs")
 	{
-	
-
 		lastX = SCR_WIDTH / 2.0f;
 		lastY = SCR_HEIGHT / 2.0f;
 	}

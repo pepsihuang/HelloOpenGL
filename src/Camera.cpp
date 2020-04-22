@@ -48,7 +48,7 @@ void Camera::PrecessKeyBoard(int type, float deltatime)
 		m_Position -= m_Right * velocity;
 		break;
 	case _RIGHT:
-		m_Position *= m_Right * velocity;
+		m_Position += m_Right * velocity;
 		break;
 	}
 }
