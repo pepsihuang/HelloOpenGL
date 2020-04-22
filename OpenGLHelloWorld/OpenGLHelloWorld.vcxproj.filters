@@ -88,5 +88,14 @@
     <None Include="..\path\3d_shader.fs">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="..\path\lamp.fs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="..\path\color.fs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="..\path\color.vs">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
 </Project>
