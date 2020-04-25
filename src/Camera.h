@@ -29,7 +29,9 @@ public:
 		_FORWARD_,
 		_BACKWARD_,
 		_LEFT_,
-		_RIGHT,
+		_RIGHT_,
+		_UP_,
+		_DOWN_,
 	};
 	// ªÒµ√lookat±‰ªªæÿ’Û
 	glm::mat4 GetViewMatrix();

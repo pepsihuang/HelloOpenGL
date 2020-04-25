@@ -187,8 +187,17 @@ private:
 		}
 		else if (glfwGetKey(wnd, GLFW_KEY_D) == GLFW_PRESS)
 		{
-			camera.PrecessKeyBoard(Camera::_RIGHT, deltaTime);
+			camera.PrecessKeyBoard(Camera::_RIGHT_, deltaTime);
 		}
+		else if (glfwGetKey(wnd, GLFW_KEY_Z) == GLFW_PRESS)
+		{
+			camera.PrecessKeyBoard(Camera::_UP_, deltaTime);
+		}
+		else if (glfwGetKey(wnd, GLFW_KEY_C) == GLFW_PRESS)
+		{
+			camera.PrecessKeyBoard(Camera::_DOWN_, deltaTime);
+		}
+
 	}
 	virtual void OnMouseCallBack(GLFWwindow* wnd, double xpos, double ypos)
 	{
