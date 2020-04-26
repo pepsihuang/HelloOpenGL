@@ -141,6 +141,7 @@ private:
 		lightShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
 		lightShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 		lightShader.setVec3("lightPos", lightPos.x, lightPos.y, lightPos.z);//这个还是需要放在循环当中,否则就无法显示了
+		lightShader.setVec3("viewPos", camera.m_Position.x, camera.m_Position.y, camera.m_Position.z);
 
 		//视觉以及透视投影变换矩阵
 		glm::mat4 projection = glm::perspective(glm::radians(camera.m_Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
