@@ -6,8 +6,6 @@ out vec4 FragColor;
 in vec3 Normal;
 in vec3 FragPos;
   
-uniform vec3 objectColor;
-uniform vec3 lightColor;
 uniform vec3 lightPos;
 uniform vec3 viewPos;
 
@@ -29,19 +27,21 @@ struct Light{
 	vec3 specular;
 };
 
+uniform Light light;
+
 void main()
 {
    
 	
 	//环境光--
-	vec3 ambient = lightColor * material.ambient;
+	vec3 ambient = light.ambient * material.ambient;
 	//环境光 end
 
 	//漫反射光--
 	vec3 norm = normalize(Normal);//法向量的标准化
-	vec3 lightDir = normalize(lightPos - FragPos);//定向光线的标准化 (即从光源到片元的单位向量)
+	vec3 lightDir = normalize(light.position - FragPos);//定向光线的标准化 (即从光源到片元的单位向量)
 	float diff = max(dot(norm, lightDir), 0.0);//点乘 如果结果为负数,说明角度超过90°, 负数颜色是没有定义的.
-	vec3 diffuse = lightColor * (diff * material.diffuse);
+	vec3 diffuse = light.diffuse * (diff * material.diffuse);
 	//漫反射光 end
 	
 	//镜面反射光--
@@ -55,7 +55,7 @@ void main()
 	// 2. double pow(double x, double y) 返回 x 的 y 次幂.
 	// 3. '32'代表高光的反光度 。一个物体的反光度越高，反射能力越强，散射得越少，高光点越小。
 	float spec = pow( max(dot(viewDir, refrectDir), 0.0), material.shininess );
-	vec3 specular = lightColor * (spec * material.specular);
+	vec3 specular = light.specular * (spec * material.specular);
 	//镜面反射光 end
 
 

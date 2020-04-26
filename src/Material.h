@@ -10,18 +10,8 @@
 #include "glm/gtc/type_ptr.hpp"
 
 /*
-光照-颜色
-这里的实现 实际只是绘制了两个立方体,然后给两个立方体指定颜色
-第一个橘黄色立方体:
-是使用珊瑚红 和 白色混合从而模拟出物体反射颜色的原理.就像现实生活中白色光打在任何颜色物体上反射出来的就是物体不吸收的颜色
-即:向量点乘模拟现实光照反射效果
-
-第二个纯白色立方体:
-模拟光源本身的,用这个立方体来代表光本体,就像现实生活中的灯泡/太阳
-
-给白色立方体单独建立一个着色器的目的是为了给它单独设置颜色,从而后面再在修改物体本身颜色时 保持白色立方体(光源)的独立.
-所以在lamp.fs中就很简单的写死了全是1.0向量的白色.
-
+光照-材质
+材质的定义实质就是通过颜色和光来共同定义.
 
 */
 
@@ -137,14 +127,24 @@ private:
 		deltaTime = curtime - lastFrame;
 		lastFrame = curtime;
 
-		lightPos.x = 1.0f + sin(glfwGetTime()) * 2.0f;
+		//lightPos.x = 1.0f + sin(glfwGetTime()) * 2.0f;
 
 		lightShader.use();
-		//设置物品的颜色和灯光的颜色
-		lightShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
-		lightShader.setVec3("lightColor", 0.5f, 0.5f, 0.3f);
-		lightShader.setVec3("lightPos", lightPos.x, lightPos.y, lightPos.z);//这个还是需要放在循环当中,否则就无法显示了
+		lightShader.setVec3("light.position", lightPos.x, lightPos.y, lightPos.z);//这个还是需要放在循环当中,否则就无法显示了
 		lightShader.setVec3("viewPos", camera.m_Position.x, camera.m_Position.y, camera.m_Position.z);
+
+		//光源的属性
+		glm::vec3 lightColor;
+		//让光的颜色随机变化
+		lightColor.x = sin(glfwGetTime()) * 2.0f;
+		lightColor.y = sin(glfwGetTime()) * 0.7f;
+		lightColor.z = sin(glfwGetTime()) * 1.3f;
+		glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f);//降低影响
+		glm::vec3 ambientColor = diffuseColor * glm::vec3(0.5f);//环境光的影响更需要降低
+
+		lightShader.setVec3("light.ambient", diffuseColor);
+		lightShader.setVec3("light.diffuse", ambientColor);
+		lightShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
 		lightShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
 		lightShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);

@@ -124,3 +124,8 @@ void CShaderFromFile::setVec3(const std::string & name, float x, float y, float 
 {
 	glUniform3f(glGetUniformLocation(m_id, name.c_str()), x, y, z);
 }
+
+void CShaderFromFile::setVec3(const std::string & name, const glm::vec3& vec)
+{
+	glUniform3fv(glGetUniformLocation(m_id, name.c_str()), 1, &vec[0]);
+}
