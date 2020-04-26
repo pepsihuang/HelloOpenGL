@@ -136,6 +136,8 @@ private:
 		deltaTime = curtime - lastFrame;
 		lastFrame = curtime;
 
+		lightPos.x = 1.0f + sin(glfwGetTime()) * 2.0f;
+
 		lightShader.use();
 		//设置物品的颜色和灯光的颜色
 		lightShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
