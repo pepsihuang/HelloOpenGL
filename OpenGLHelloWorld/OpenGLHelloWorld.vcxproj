@@ -138,6 +138,7 @@
     <ClInclude Include="..\src\CShaderFromFile.h" />
     <ClInclude Include="..\src\CUseShaderFile.h" />
     <ClInclude Include="..\src\Global.h" />
+    <ClInclude Include="..\src\Material.h" />
     <ClInclude Include="..\src\triangle_shader.h" />
   </ItemGroup>
   <ItemGroup>
@@ -148,6 +149,8 @@
     <None Include="..\path\lamp.fs" />
     <None Include="..\path\lamp.vs" />
     <None Include="..\path\mat4_shader.vs" />
+    <None Include="..\path\materials.fs" />
+    <None Include="..\path\materials.vs" />
     <None Include="..\path\Shader.fs" />
     <None Include="..\path\Shader.vs" />
     <None Include="..\path\tex_shader.fs" />

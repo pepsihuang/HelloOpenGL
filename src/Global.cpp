@@ -1,5 +1,6 @@
 #include "Global.h"
 #include "CColor.h"
+#include "Material.h"
 
 static CBase* base = NULL;
 
@@ -7,7 +8,7 @@ CBase* GetPtr()
 {
 	if (!base)
 	{
-		base = new CColor;
+		base = new CMaterial;
 	}
 	return base;
 }

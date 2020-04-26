@@ -1,4 +1,5 @@
 #pragma once
+
 #include "CBase.h"
 #include "Camera.h"
 #include "CShaderFromFile.h"
@@ -25,17 +26,17 @@
 */
 
 
-class CColor : public CBase
+class CMaterial : public CBase
 {
 public:
-	CColor() 
-		:lightShader("../path/color.vs", "../path/color.fs")
-		,lampShader("../path/lamp.vs", "../path/lamp.fs")
+	CMaterial()
+		:lightShader("../path/materials.vs", "../path/materials.fs")
+		, lampShader("../path/lamp.vs", "../path/lamp.fs")
 	{
 		lastX = SCR_WIDTH / 2.0f;
 		lastY = SCR_HEIGHT / 2.0f;
 	}
-	~CColor() {}
+	~CMaterial() {}
 
 private:
 	float deltaTime;	// time between current frame and last frame
@@ -54,7 +55,7 @@ private:
 	//配置灯光使用的VAO,VBO保持相同,灯光对象的顶点同样是3d立方体 
 	unsigned int lightVAO;
 
-	virtual void BeforeLoop() 
+	virtual void BeforeLoop()
 	{
 		// timing
 		deltaTime = 0.0f;	// time between current frame and last frame
@@ -107,7 +108,7 @@ private:
 			 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
 			 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
 			-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-			-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f	
+			-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
 		};
 
 		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
@@ -145,19 +146,24 @@ private:
 		lightShader.setVec3("lightPos", lightPos.x, lightPos.y, lightPos.z);//这个还是需要放在循环当中,否则就无法显示了
 		lightShader.setVec3("viewPos", camera.m_Position.x, camera.m_Position.y, camera.m_Position.z);
 
+		lightShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
+		lightShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
+		lightShader.setVec3("material.specular", 0.5f, 0.5f, 0.31f);
+		lightShader.setFloat("material.shininess", 32.0f);
+
 		//视觉以及透视投影变换矩阵
 		glm::mat4 projection = glm::perspective(glm::radians(camera.m_Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		glm::mat4 view = camera.GetViewMatrix();
 		lightShader.setMat4("projection", glm::value_ptr(projection));
 		lightShader.setMat4("view", glm::value_ptr(view));
-	
+
 		glm::mat4 model = glm::mat4(1.0f);
 		lightShader.setMat4("model", glm::value_ptr(model));
 
 		//渲染立方体
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);//一个三角形3个顶点,一个四方形6个顶点,一个四方体6*6=36
-	
+
 		//绘制灯光立方体
 		lampShader.use();
 		lampShader.setMat4("projection", glm::value_ptr(projection));
@@ -172,7 +178,7 @@ private:
 
 	}
 
-	virtual void OnProcessInput(GLFWwindow* wnd) 
+	virtual void OnProcessInput(GLFWwindow* wnd)
 	{
 
 		//在前后移动中: front中是z方向有数值,所以直接乘上移动量即可
@@ -220,6 +226,6 @@ private:
 	virtual void OnScrollCallBack(GLFWwindow* window, double xoffset, double yoffset)
 	{
 		camera.ProcessMouseScroll(yoffset);
-	
+
 	}
 };

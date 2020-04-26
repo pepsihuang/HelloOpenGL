@@ -65,6 +65,9 @@
     <ClInclude Include="..\src\CColor.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\Material.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\path\Shader.fs">
@@ -98,6 +101,12 @@
       <Filter>资源文件</Filter>
     </None>
     <None Include="..\path\lamp.vs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="..\path\materials.fs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="..\path\materials.vs">
       <Filter>资源文件</Filter>
     </None>
   </ItemGroup>
