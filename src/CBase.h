@@ -19,8 +19,8 @@ public:
 	void Loop();
 
 	virtual void OnProcessInput(GLFWwindow* wnd) {}
-	virtual void OnMouseCallBack(GLFWwindow* wnd, double xpos, double ypos) {}
-	virtual void OnScrollCallBack(GLFWwindow* window, double xoffset, double yoffset) {}
+	virtual void OnMouseCallBack(GLFWwindow* wnd, double xpos, double ypos);
+	virtual void OnScrollCallBack(GLFWwindow* window, double xoffset, double yoffset);
 
 	const unsigned int SCR_WIDTH = 1280;
 	const unsigned int SCR_HEIGHT = 720;

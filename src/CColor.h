@@ -162,24 +162,4 @@ private:
 
 	}
 
-	virtual void OnMouseCallBack(GLFWwindow* wnd, double xpos, double ypos)
-	{
-		if (firstMouse)
-		{
-			lastX = xpos;
-			lastY = ypos;
-			firstMouse = false;
-		}
-		float xoffset = xpos - lastX;
-		float yoffset = lastY - ypos;
-
-		lastX = xpos;
-		lastY = ypos;
-		camera.ProcessMouseMovement(xoffset, yoffset, true);
-	}
-	virtual void OnScrollCallBack(GLFWwindow* window, double xoffset, double yoffset)
-	{
-		camera.ProcessMouseScroll(yoffset);
-	
-	}
 };

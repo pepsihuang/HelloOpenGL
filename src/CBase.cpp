@@ -97,6 +97,27 @@ void CBase::Loop()
 
 
 
+void CBase::OnMouseCallBack(GLFWwindow* wnd, double xpos, double ypos)
+{
+	if (firstMouse)
+	{
+		lastX = xpos;
+		lastY = ypos;
+		firstMouse = false;
+	}
+	float xoffset = xpos - lastX;
+	float yoffset = lastY - ypos;
+
+	lastX = xpos;
+	lastY = ypos;
+	camera.ProcessMouseMovement(xoffset, yoffset, true);
+}
+
+void CBase::OnScrollCallBack(GLFWwindow* window, double xoffset, double yoffset)
+{
+	camera.ProcessMouseScroll(yoffset);
+}
+
 void CBase::processInput(GLFWwindow* wnd)
 {
 
