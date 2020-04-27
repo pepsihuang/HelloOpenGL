@@ -16,7 +16,11 @@
 实质就是将贴图添加进来即可.
 
 镜面光贴图：
-
+使用一张镜面光强度的黑白贴图来获得光强度。而在例子中的木材部分是不需要提升光强度的，所以就是黑色vec3(0.0)。
+这样在片段着色器中，讲这个贴图中的光强添加到贴图的最终光强效果时，就只有边框的金属受到影响。
+（这里的贴图是‘黑白’对理解非常重要）
+这样的作法比我自己设想的要简单。
+{我自己设想是，分区域的设置光强，这样一对比太麻烦了。}
 
 */
 
@@ -43,6 +47,7 @@ private:
 	//配置灯光使用的VAO,VBO保持相同,灯光对象的顶点同样是3d立方体 
 	unsigned int lightVAO;
 	unsigned int diffuse_map;
+	unsigned int specular_map;
 
 	virtual void BeforeLoop()
 	{
@@ -120,8 +125,10 @@ private:
 		glEnableVertexAttribArray(0);
 
 		diffuse_map = loadImage("../path/container2.png");
+		specular_map = loadImage("../path/container2_specular.png");
 		lightShader.use();
 		lightShader.setInt("material.diffuse", 0);
+		lightShader.setInt("material.specular", 1);
 
 	}
 
@@ -158,6 +165,9 @@ private:
 		//绑定漫反射贴图
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, diffuse_map);
+		//绑定镜面光贴图
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, specular_map);
 
 		//渲染立方体
 		glBindVertexArray(VAO);

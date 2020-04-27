@@ -15,7 +15,8 @@ struct Material {
 	//由于环境光颜色在绝大多数情况下等于漫反射颜色，所以省略掉存储
 	//漫反射光贴图
 	sampler2D diffuse;
-	vec3 specular;
+	//镜面高光纹理贴图
+	sampler2D specular;
 	float shininess;
 };
 
@@ -47,17 +48,11 @@ void main()
 	//漫反射光 end
 	
 	//镜面反射光--
-	vec3 viewDir = normalize( viewPos - FragPos);//视线方向向量
-	//对应的沿着法线轴的反射向量
-	//第一个参数要求从片元指向光源所以取反. 第二个参数为单位法向量
+	vec3 viewDir = normalize( viewPos - FragPos);
 	vec3 refrectDir = reflect(-lightDir, norm);
-
-	//计算镜面分量
-	// 1.视线向量与反射向量的夹角,并且要求必须保证为正数.
-	// 2. double pow(double x, double y) 返回 x 的 y 次幂.
-	// 3. '32'代表高光的反光度 。一个物体的反光度越高，反射能力越强，散射得越少，高光点越小。
 	float spec = pow( max(dot(viewDir, refrectDir), 0.0), material.shininess );
-	vec3 specular = light.specular * (spec * material.specular);
+	//这里的贴图坐标还是使用TexCoords，但颜色采样使用了指定的第二张贴图，所以就能做到影响效果。
+	vec3 specular = light.specular * spec * vec3(texture(material.specular, TexCoords));//黑色为0.0所以没有镜面反射
 	//镜面反射光 end
 
 
