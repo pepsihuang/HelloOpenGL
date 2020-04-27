@@ -2,7 +2,6 @@
 #include "Global.h"
 
 
-
 CBase::CBase()
 {
 	init();
@@ -70,6 +69,9 @@ int CBase::init()
 
 void CBase::Loop()
 {
+	// timing
+	deltaTime = 0.0f;	// time between current frame and last frame
+	lastFrame = 0.0f;
 	//如有前置操作自行实现
 	BeforeLoop();
 	//循环渲染
@@ -79,6 +81,11 @@ void CBase::Loop()
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//同时清除深度缓存
+
+
+		double curtime = glfwGetTime();
+		deltaTime = curtime - lastFrame;
+		lastFrame = curtime;
 
 		//子类自己去实现
 		OnLoop();
@@ -95,6 +102,31 @@ void CBase::processInput(GLFWwindow* wnd)
 
 	if (glfwGetKey(wnd, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(wnd, true);
+	//在前后移动中: front中是z方向有数值,所以直接乘上移动量即可
+	else if (glfwGetKey(wnd, GLFW_KEY_W) == GLFW_PRESS)
+	{
+		camera.PrecessKeyBoard(Camera::_FORWARD_, deltaTime);
+	}
+	else if (glfwGetKey(wnd, GLFW_KEY_S) == GLFW_PRESS)
+	{
+		camera.PrecessKeyBoard(Camera::_BACKWARD_, deltaTime);
+	}
+	else if (glfwGetKey(wnd, GLFW_KEY_A) == GLFW_PRESS)
+	{
+		camera.PrecessKeyBoard(Camera::_LEFT_, deltaTime);
+	}
+	else if (glfwGetKey(wnd, GLFW_KEY_D) == GLFW_PRESS)
+	{
+		camera.PrecessKeyBoard(Camera::_RIGHT_, deltaTime);
+	}
+	else if (glfwGetKey(wnd, GLFW_KEY_Z) == GLFW_PRESS)
+	{
+		camera.PrecessKeyBoard(Camera::_UP_, deltaTime);
+	}
+	else if (glfwGetKey(wnd, GLFW_KEY_C) == GLFW_PRESS)
+	{
+		camera.PrecessKeyBoard(Camera::_DOWN_, deltaTime);
+	}
 	else
 		OnProcessInput(wnd);
 }

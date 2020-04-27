@@ -2,6 +2,7 @@
 #include <glad/glad.h>//需要在glfw前 否则会报编译错误
 #include <glfw/glfw3.h>
 #include <iostream>
+#include "Camera.h"
 
 /*
 将公用的方法集合成为基类 
@@ -31,11 +32,23 @@ private:
 
 	void processInput(GLFWwindow* wnd);
 
+
+
 protected:
 
 	unsigned int VBO;
 	unsigned int VAO;
 	unsigned int EBO;
 	GLFWwindow* m_wnd;
+
+
+	Camera camera;
+	float deltaTime;	// time between current frame and last frame
+	float lastFrame;
+
+
+	float lastX;
+	float lastY;
+	bool firstMouse;
 };
 

@@ -11,7 +11,7 @@ public:
 	CUseShaderFile();
 	~CUseShaderFile();
 
-	unsigned int loadImage(const char* path, bool bTransparency = false);
+	//unsigned int loadImage(const char* path, bool bTransparency = false);
 	int init();
 	int texture();
 	int triangle();

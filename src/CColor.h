@@ -38,13 +38,7 @@ public:
 	~CColor() {}
 
 private:
-	float deltaTime;	// time between current frame and last frame
-	float lastFrame;
 
-	Camera camera;
-	float lastX;
-	float lastY;
-	bool firstMouse;
 
 	//灯光的颜色
 	glm::vec3 lightPos;
@@ -56,9 +50,7 @@ private:
 
 	virtual void BeforeLoop() 
 	{
-		// timing
-		deltaTime = 0.0f;	// time between current frame and last frame
-		lastFrame = 0.0f;
+
 		camera.m_Position = glm::vec3(0.0f, 0.0f, 7.0f);
 		firstMouse = true;
 		//灯光的位置
@@ -132,9 +124,7 @@ private:
 
 	virtual void OnLoop() {
 
-		double curtime = glfwGetTime();
-		deltaTime = curtime - lastFrame;
-		lastFrame = curtime;
+
 
 		lightPos.x = 1.0f + sin(glfwGetTime()) * 2.0f;
 
@@ -172,36 +162,6 @@ private:
 
 	}
 
-	virtual void OnProcessInput(GLFWwindow* wnd) 
-	{
-
-		//在前后移动中: front中是z方向有数值,所以直接乘上移动量即可
-		if (glfwGetKey(wnd, GLFW_KEY_W) == GLFW_PRESS)
-		{
-			camera.PrecessKeyBoard(Camera::_FORWARD_, deltaTime);
-		}
-		else if (glfwGetKey(wnd, GLFW_KEY_S) == GLFW_PRESS)
-		{
-			camera.PrecessKeyBoard(Camera::_BACKWARD_, deltaTime);
-		}
-		else if (glfwGetKey(wnd, GLFW_KEY_A) == GLFW_PRESS)
-		{
-			camera.PrecessKeyBoard(Camera::_LEFT_, deltaTime);
-		}
-		else if (glfwGetKey(wnd, GLFW_KEY_D) == GLFW_PRESS)
-		{
-			camera.PrecessKeyBoard(Camera::_RIGHT_, deltaTime);
-		}
-		else if (glfwGetKey(wnd, GLFW_KEY_Z) == GLFW_PRESS)
-		{
-			camera.PrecessKeyBoard(Camera::_UP_, deltaTime);
-		}
-		else if (glfwGetKey(wnd, GLFW_KEY_C) == GLFW_PRESS)
-		{
-			camera.PrecessKeyBoard(Camera::_DOWN_, deltaTime);
-		}
-
-	}
 	virtual void OnMouseCallBack(GLFWwindow* wnd, double xpos, double ypos)
 	{
 		if (firstMouse)
