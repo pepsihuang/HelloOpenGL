@@ -4,6 +4,8 @@
 
 CBase::CBase()
 {
+	lastX = SCR_WIDTH / 2.0f;
+	lastY = SCR_HEIGHT / 2.0f;
 	init();
 }
 
@@ -77,15 +79,16 @@ void CBase::Loop()
 	//循环渲染
 	while (!glfwWindowShouldClose(m_wnd))
 	{
+
+		double curtime = glfwGetTime();
+		deltaTime = curtime - lastFrame;
+		lastFrame = curtime;
 		processInput(m_wnd);
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//同时清除深度缓存
 
 
-		double curtime = glfwGetTime();
-		deltaTime = curtime - lastFrame;
-		lastFrame = curtime;
 
 		//子类自己去实现
 		OnLoop();
@@ -123,8 +126,7 @@ void CBase::processInput(GLFWwindow* wnd)
 
 	if (glfwGetKey(wnd, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(wnd, true);
-	//在前后移动中: front中是z方向有数值,所以直接乘上移动量即可
-	else if (glfwGetKey(wnd, GLFW_KEY_W) == GLFW_PRESS)
+	else if (glfwGetKey(wnd, GLFW_KEY_W) == GLFW_PRESS)//在前后移动中: front中是z方向有数值,所以直接乘上移动量即可
 	{
 		camera.PrecessKeyBoard(Camera::_FORWARD_, deltaTime);
 	}

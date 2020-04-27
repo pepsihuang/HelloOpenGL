@@ -32,8 +32,6 @@ public:
 		:lightShader("../path/color.vs", "../path/color.fs")
 		,lampShader("../path/lamp.vs", "../path/lamp.fs")
 	{
-		lastX = SCR_WIDTH / 2.0f;
-		lastY = SCR_HEIGHT / 2.0f;
 	}
 	~CColor() {}
 

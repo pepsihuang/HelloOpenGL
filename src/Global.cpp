@@ -1,6 +1,7 @@
 #include "Global.h"
 #include "CColor.h"
 #include "Material.h"
+#include "LightMaterial.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -11,7 +12,7 @@ CBase* GetPtr()
 {
 	if (!base)
 	{
-		base = new CMaterial;
+		base = new CLightMaterial;
 	}
 	return base;
 }
@@ -38,7 +39,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 	GetPtr()->OnScrollCallBack(window, xoffset, yoffset);
 }
 
-unsigned int loadImage(const char* path, bool bTransparency)
+unsigned int loadImage(const char* path)
 {
 	if (!path)
 	{
@@ -51,6 +52,19 @@ unsigned int loadImage(const char* path, bool bTransparency)
 	{
 		std::cout << "::loadImage: FAILED to load texture:" << path << std::endl;
 		return 0;
+	}
+	GLenum format;
+	if (nrChannels == 1)
+	{
+		format = GL_RED;
+	}
+	else if (nrChannels == 3)
+	{
+		format = GL_RGB;
+	}
+	else if (nrChannels == 4)
+	{
+		format = GL_RGBA;
 	}
 	unsigned int texture;
 	//参数一 为生成纹理的数量
@@ -80,11 +94,11 @@ unsigned int loadImage(const char* path, bool bTransparency)
 	glTexImage2D(
 		GL_TEXTURE_2D, //纹理目标
 		0, //多级渐远纹理的级别，0为基础级别
-		bTransparency ? GL_RGBA : GL_RGB, //期望的纹理存储格式
+		format,
 		width, //纹理高宽
 		height,
 		0, //只能为0 OpenGL辣鸡代码
-		bTransparency ? GL_RGBA : GL_RGB, //原图的格式和数据类型
+		format,
 		GL_UNSIGNED_BYTE,
 		data);//参数数据
 	glGenerateMipmap(GL_TEXTURE_2D);

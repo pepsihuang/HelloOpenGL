@@ -231,7 +231,7 @@ int CUseShaderFile::texture()
 
 
 	m_texture = ::loadImage("../path/wall.jpg");
-	m_texture2 = ::loadImage("../path/face.png", true);
+	m_texture2 = ::loadImage("../path/face.png");
 
 	return 0;
 
@@ -316,7 +316,7 @@ int CUseShaderFile::texture_3d()
 	//stbi_set_flip_vertically_on_load(true);
 
 	m_texture = loadImage("../path/wall.jpg");
-	m_texture2 = loadImage("../path/face.png", true);
+	m_texture2 = loadImage("../path/face.png");
 
 
 	return 0;

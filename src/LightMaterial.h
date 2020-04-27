@@ -23,19 +23,12 @@ public:
 		:lightShader("../path/light_material.vs", "../path/light_material.fs")
 		, lampShader("../path/lamp.vs", "../path/lamp.fs")
 	{
-		lastX = SCR_WIDTH / 2.0f;
-		lastY = SCR_HEIGHT / 2.0f;
+
 	}
 	~CLightMaterial() {}
 
 private:
-	float deltaTime;	// time between current frame and last frame
-	float lastFrame;
 
-	Camera camera;
-	float lastX;
-	float lastY;
-	bool firstMouse;
 
 	//灯光的颜色
 	glm::vec3 lightPos;
@@ -44,6 +37,7 @@ private:
 
 	//配置灯光使用的VAO,VBO保持相同,灯光对象的顶点同样是3d立方体 
 	unsigned int lightVAO;
+	unsigned int diffuse_map;
 
 	virtual void BeforeLoop()
 	{
@@ -53,7 +47,7 @@ private:
 		camera.m_Position = glm::vec3(0.0f, 0.0f, 7.0f);
 		firstMouse = true;
 		//灯光的位置
-		lightPos = glm::vec3(1.2f, 1.0f, 2.0f);
+		lightPos = glm::vec3(0.3f, 1.0f, 2.0f);
 		glEnable(GL_DEPTH_TEST);
 
 		//一个三角形3个顶点,一个四方形6个顶点,一个四方体6*6=36
@@ -120,7 +114,9 @@ private:
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 		glEnableVertexAttribArray(0);
 
-		//unsigned int diffuse_map = loadImage("../path/container2.png", false);
+		diffuse_map = loadImage("../path/container2.png");
+		lightShader.use();
+		lightShader.setInt("material.diffuse", 0);
 
 	}
 
@@ -131,29 +127,19 @@ private:
 		deltaTime = curtime - lastFrame;
 		lastFrame = curtime;
 
-		//lightPos.x = 1.0f + sin(glfwGetTime()) * 2.0f;
-
 		lightShader.use();
-		lightShader.setVec3("light.position", lightPos.x, lightPos.y, lightPos.z);//这个还是需要放在循环当中,否则就无法显示了
-		lightShader.setVec3("viewPos", camera.m_Position.x, camera.m_Position.y, camera.m_Position.z);
+
+		lightShader.setVec3("light.position", lightPos);//这个还是需要放在循环当中,否则就无法显示了
+		lightShader.setVec3("viewPos", camera.m_Position);
 
 		//光源的属性
-		glm::vec3 lightColor;
-		//让光的颜色随机变化
-		lightColor.x = sin(glfwGetTime()) * 2.0f;
-		lightColor.y = sin(glfwGetTime()) * 0.7f;
-		lightColor.z = sin(glfwGetTime()) * 1.3f;
-		glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f);//降低影响
-		glm::vec3 ambientColor = diffuseColor * glm::vec3(0.5f);//环境光的影响更需要降低
-
-		lightShader.setVec3("light.ambient", diffuseColor);
-		lightShader.setVec3("light.diffuse", ambientColor);
+		lightShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
+		lightShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
 		lightShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-
-		lightShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
-		lightShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
+		//材质的属性
 		lightShader.setVec3("material.specular", 0.5f, 0.5f, 0.31f);
 		lightShader.setFloat("material.shininess", 32.0f);
+		lightShader.setInt("material.diffuse", 0);
 
 		//视觉以及透视投影变换矩阵
 		glm::mat4 projection = glm::perspective(glm::radians(camera.m_Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
@@ -163,6 +149,10 @@ private:
 
 		glm::mat4 model = glm::mat4(1.0f);
 		lightShader.setMat4("model", glm::value_ptr(model));
+
+		//绑定漫反射贴图
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, diffuse_map);
 
 		//渲染立方体
 		glBindVertexArray(VAO);
