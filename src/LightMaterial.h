@@ -11,8 +11,13 @@
 
 /*
 光照-光照材质贴图
+漫反射贴图：
 将之前的贴图添加到光照材质中.
 实质就是将贴图添加进来即可.
+
+镜面光贴图：
+
+
 */
 
 
@@ -139,7 +144,7 @@ private:
 		//材质的属性
 		lightShader.setVec3("material.specular", 0.5f, 0.5f, 0.31f);
 		lightShader.setFloat("material.shininess", 32.0f);
-		lightShader.setInt("material.diffuse", 0);
+		
 
 		//视觉以及透视投影变换矩阵
 		glm::mat4 projection = glm::perspective(glm::radians(camera.m_Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
