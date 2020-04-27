@@ -17,6 +17,8 @@ struct Material {
 	sampler2D diffuse;
 	//镜面高光纹理贴图
 	sampler2D specular;
+	//放射光贴图
+	sampler2D emission;
 	float shininess;
 };
 
@@ -55,8 +57,9 @@ void main()
 	vec3 specular = light.specular * spec * vec3(texture(material.specular, TexCoords));//黑色为0.0所以没有镜面反射
 	//镜面反射光 end
 
+	vec3 emission = vec3(texture(material.emission, TexCoords));
 
-	vec3 result = ambient + diffuse + specular;
+	vec3 result = ambient + diffuse + specular + emission;
     FragColor = vec4(result, 1.0);
 
 }

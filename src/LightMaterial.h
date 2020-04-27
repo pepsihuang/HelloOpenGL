@@ -48,6 +48,7 @@ private:
 	unsigned int lightVAO;
 	unsigned int diffuse_map;
 	unsigned int specular_map;
+	unsigned int emission_map;
 
 	virtual void BeforeLoop()
 	{
@@ -126,9 +127,11 @@ private:
 
 		diffuse_map = loadImage("../path/container2.png");
 		specular_map = loadImage("../path/container2_specular.png");
+		emission_map = loadImage("../path/matrix.jpg");
 		lightShader.use();
 		lightShader.setInt("material.diffuse", 0);
 		lightShader.setInt("material.specular", 1);
+		lightShader.setInt("material.emission", 2);
 
 	}
 
@@ -168,6 +171,9 @@ private:
 		//绑定镜面光贴图
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, specular_map);
+		//绑定放射光贴图
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, emission_map);
 
 		//渲染立方体
 		glBindVertexArray(VAO);
