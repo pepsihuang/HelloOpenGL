@@ -6,6 +6,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 #include "LightCasters.h"
+#include "LightCastersSpot.h"
 
 static CBase* base = NULL;
 
@@ -13,7 +14,7 @@ CBase* GetPtr()
 {
 	if (!base)
 	{
-		base = new CLightCasters;
+		base = new CLightCastersSpot;
 	}
 	return base;
 }
