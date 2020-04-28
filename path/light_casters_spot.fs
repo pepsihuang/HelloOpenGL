@@ -41,41 +41,36 @@ uniform Light light;
 void main()
 {
    
-   vec3 lightDir = normalize(light.position - FragPos);//从片元指向光源
-   
-   float theta = dot(lightDir, normalize(-light.direction));//计算当前片元到光源的向量与光指向的方向向量夹角的余弦值
-   //这里是余弦值,0度表示1.0的余弦值, 90度表示0.0的余弦值
-   //从0度到180度的余弦值范围为1~0~-1
-   if(theta > light.cutOff)//所以需要使用'>'
-   {
-		//环境光
-		vec3 ambient        = light.ambient * vec3(texture(material.diffuse, TexCoords));
-		//漫反射光--
-		vec3 norm           = normalize(Normal);//法向量的标准化
-		float diff          = max(dot(norm, lightDir), 0.0);//点乘 如果结果为负数,说明角度超过90°, 负数颜色是没有定义的.
-		vec3 diffuse        = light.diffuse * diff * vec3(texture(material.diffuse, TexCoords));//texture方法采样纹理颜色
-		//镜面反射光--
-		vec3 viewDir        = normalize( viewPos - FragPos);
-		vec3 refrectDir     = reflect(-lightDir, norm);
-		float spec          = pow( max(dot(viewDir, refrectDir), 0.0), material.shininess );
-		//这里的贴图坐标还是使用TexCoords，但颜色采样使用了指定的第二张贴图，所以就能做到只影响我们设定好的区域的效果。
-		vec3 specular       = light.specular * spec * vec3(texture(material.specular, TexCoords));//黑色为0.0所以没有镜面反射
+
+	//环境光
+	vec3 ambient        = light.ambient * vec3(texture(material.diffuse, TexCoords));
+	//漫反射光--
+	vec3 norm           = normalize(Normal);//法向量的标准化
+    vec3 lightDir		= normalize(light.position - FragPos);//从片元指向光源
+	float diff          = max(dot(norm, lightDir), 0.0);//点乘 如果结果为负数,说明角度超过90°, 负数颜色是没有定义的.
+	vec3 diffuse        = light.diffuse * diff * vec3(texture(material.diffuse, TexCoords));//texture方法采样纹理颜色
+	//镜面反射光--
+	vec3 viewDir        = normalize( viewPos - FragPos);
+	vec3 refrectDir     = reflect(-lightDir, norm);
+	float spec          = pow( max(dot(viewDir, refrectDir), 0.0), material.shininess );
+	//这里的贴图坐标还是使用TexCoords，但颜色采样使用了指定的第二张贴图，所以就能做到只影响我们设定好的区域的效果。
+	vec3 specular       = light.specular * spec * vec3(texture(material.specular, TexCoords));//黑色为0.0所以没有镜面反射
 	
-		//点光源的算法 
-		//衰减
-		float distance		= length(light.position - FragPos);
-		float attenuation	= 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance*distance));
-		//衰减对光源分量的影响
-		//这里移除衰减对环境光的影响,因为环境光本身已经很弱,如果在衰减,可能就黑得看不到了. 
-		diffuse		*= attenuation;
-		specular	*= attenuation;
-		vec3 result = ambient + diffuse + specular;
-		FragColor   = vec4(result, 1.0);
-   }
-   else
-   {
-   	   //在聚光外,则保留环境光,避免其他地方啥都看不到
-	   FragColor = vec4(light.ambient * texture(material.diffuse, TexCoords).rgb, 1.0);
-   }
+	//点光源的算法 软边界
+	float theta			= dot(lightDir, normalize(-light.direction));
+	float epsilon		= light.cutOff - light.outerCutOff;
+	float intensity		= clamp((theta - light.outerCutOff) / epsilon, 0.0, 1.0);//软边界算法
+	diffuse				*= intensity;
+	specular			*= intensity;
+	//衰减
+	float distance		= length(light.position - FragPos);
+	float attenuation	= 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance*distance));//衰减算法
+	//衰减对光源分量的影响
+	//这里移除衰减对环境光的影响,因为环境光本身已经很弱,如果在衰减,可能就黑得看不到了. 
+	diffuse				*= attenuation;
+	specular			*= attenuation;
+	vec3 result			= ambient + diffuse + specular;
+	FragColor			= vec4(result, 1.0);
+
 
 }

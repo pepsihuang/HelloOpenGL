@@ -148,6 +148,7 @@ private:
 		lightShader.setVec3("light.direction", camera.m_Front);
 		//尝试了把这个数值改大改小,以为会随着角度的不同而只是变大半径,却发现结果出入很大~!
 		lightShader.setFloat("light.cutOff", glm::cos(12.5f));
+		lightShader.setFloat("light.outerCutOff", glm::cos(17.5f));
 		lightShader.setVec3("viewPos", camera.m_Position);
 
 		//光源的属性
