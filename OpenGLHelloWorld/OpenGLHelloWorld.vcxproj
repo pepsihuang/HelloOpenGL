@@ -139,6 +139,7 @@
     <ClInclude Include="..\src\CShaderFromFile.h" />
     <ClInclude Include="..\src\CUseShaderFile.h" />
     <ClInclude Include="..\src\Global.h" />
+    <ClInclude Include="..\src\LightCasters.h" />
     <ClInclude Include="..\src\LightMaterial.h" />
     <ClInclude Include="..\src\Material.h" />
     <ClInclude Include="..\src\triangle_shader.h" />
@@ -150,6 +151,8 @@
     <None Include="..\path\color.vs" />
     <None Include="..\path\lamp.fs" />
     <None Include="..\path\lamp.vs" />
+    <None Include="..\path\light_casters.fs" />
+    <None Include="..\path\light_casters.vs" />
     <None Include="..\path\light_material.fs" />
     <None Include="..\path\light_material.vs" />
     <None Include="..\path\mat4_shader.vs" />

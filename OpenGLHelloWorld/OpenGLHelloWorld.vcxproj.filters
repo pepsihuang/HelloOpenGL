@@ -71,6 +71,9 @@
     <ClInclude Include="..\src\LightMaterial.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\LightCasters.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\path\Shader.fs">
@@ -116,6 +119,12 @@
       <Filter>资源文件</Filter>
     </None>
     <None Include="..\path\light_material.vs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="..\path\light_casters.fs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="..\path\light_casters.vs">
       <Filter>资源文件</Filter>
     </None>
   </ItemGroup>
