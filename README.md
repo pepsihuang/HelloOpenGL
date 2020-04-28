@@ -3,4 +3,4 @@
 
 [个人学习知识脑图](http://naotu.baidu.com/file/91f2e25537c2c2d9b818ee704c731dc9?token=7421e0e146c2d6be)
 
-<div align="center"><img src="/HelloOpenGL.svg" alt="Icon Badge" width="40%" /></div>
+<div align="center"><img src="/HelloOpenGL.png" alt="Icon Badge" width="40%" /></div>
