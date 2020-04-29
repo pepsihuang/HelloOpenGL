@@ -7,6 +7,7 @@
 #include "stb_image.h"
 #include "LightCasters.h"
 #include "LightCastersSpot.h"
+#include "MultipleLight.h"
 
 static CBase* base = NULL;
 
@@ -14,7 +15,7 @@ CBase* GetPtr()
 {
 	if (!base)
 	{
-		base = new CLightCastersSpot;
+		base = new CMultipleLight;
 	}
 	return base;
 }
