@@ -163,7 +163,7 @@ private:
 		//ตในโิด
 		for (int i = 0; i < 4; ++i)
 		{
-			std::string str("pointLights[");
+			std::string str("pointLight[");
 			char aa[10] = {0};
 			sprintf_s(aa, "%d", i);
 			str += aa;
@@ -172,7 +172,7 @@ private:
 			tmp = str + "].ambient";
 			lightShader.setVec3(tmp, 0.05f, 0.05f, 0.05f);
 			tmp = str + "].diffuse";
-			lightShader.setVec3(tmp, 1.8f, 1.8f, 1.8f);
+			lightShader.setVec3(tmp, 0.8f, 0.8f, 0.8f);
 			tmp = str + "].specular";
 			lightShader.setVec3(tmp, 1.0f, 1.0f, 1.0f);
 			tmp = str + "].constant";
@@ -189,7 +189,7 @@ private:
 		lightShader.setVec3("spotLight.position", camera.m_Position);
 		lightShader.setVec3("spotLight.direction", camera.m_Front);
 		lightShader.setVec3("spotLight.ambient", 0.0f, 0.0f, 0.0f);
-		lightShader.setVec3("spotLight.diffuse", 1.0f, 0.8f, 0.8f);
+		lightShader.setVec3("spotLight.diffuse", 1.0f, 1.0f, 1.0f);
 		lightShader.setVec3("spotLight.specular", 1.0f, 1.0f, 1.0f);
 		lightShader.setFloat("spotLight.constant", 1.0f);
 		lightShader.setFloat("spotLight.linear", 0.09f);
