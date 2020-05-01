@@ -74,6 +74,8 @@ void CBase::Loop()
 	// timing
 	deltaTime = 0.0f;	// time between current frame and last frame
 	lastFrame = 0.0f;
+	firstMouse = true;
+	glEnable(GL_DEPTH_TEST);
 	//如有前置操作自行实现
 	BeforeLoop();
 	//循环渲染
@@ -87,9 +89,6 @@ void CBase::Loop()
 
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);//同时清除深度缓存
-
-
-
 		//子类自己去实现
 		OnLoop();
 

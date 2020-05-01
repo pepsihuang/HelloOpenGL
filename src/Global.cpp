@@ -8,6 +8,7 @@
 #include "LightCasters.h"
 #include "LightCastersSpot.h"
 #include "MultipleLight.h"
+#include "CUseModel.h"
 
 static CBase* base = NULL;
 
@@ -15,7 +16,7 @@ CBase* GetPtr()
 {
 	if (!base)
 	{
-		base = new CMultipleLight;
+		base = new CUseModel;
 	}
 	return base;
 }
@@ -42,13 +43,15 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 	GetPtr()->OnScrollCallBack(window, xoffset, yoffset);
 }
 
-unsigned int loadImage(const char* path)
+unsigned int loadImage(const char* path, bool flip)
 {
 	if (!path)
 	{
 		std::cout << "::loadImage: image path ERR!" << std::endl;
 		return 0;
 	}
+	std::cout << "begin loadImage: " << path << std::endl;
+
 	int width, height, nrChannels;//最后为颜色通道的个数
 	unsigned char* data = stbi_load(path, &width, &height, &nrChannels, 0);
 	if (!data)
@@ -90,7 +93,7 @@ unsigned int loadImage(const char* path)
 	GL_NEAREST_MIPMAP_LINEAR	在两个最匹配像素大小的多级渐远纹理之间进行线性插值，使用邻近插值进行采样
 	GL_LINEAR_MIPMAP_LINEAR		在两个邻近的多级渐远纹理之间使用线性插值，并使用线性插值进行采样
 	*/
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	//把前面载入的图片数据生成一个纹理
@@ -110,7 +113,10 @@ unsigned int loadImage(const char* path)
 	stbi_image_free(data);
 
 	//由于stb_image库的y起始在底,而一般照片的y起始在顶,所以我们需要修正
-	stbi_set_flip_vertically_on_load(true);
+	if(flip)
+		stbi_set_flip_vertically_on_load(true);
+	std::cout << "end loadImage: " << path << std::endl;
+
 	return texture;
 }
 

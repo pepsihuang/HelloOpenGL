@@ -83,6 +83,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -129,6 +130,8 @@
     <ClCompile Include="..\src\glad.c" />
     <ClCompile Include="..\src\Global.cpp" />
     <ClCompile Include="..\src\main.cpp" />
+    <ClCompile Include="..\src\mesh.cpp" />
+    <ClCompile Include="..\src\model.cpp" />
     <ClCompile Include="..\src\triangle.h" />
   </ItemGroup>
   <ItemGroup>
@@ -137,12 +140,15 @@
     <ClInclude Include="..\src\CBase.h" />
     <ClInclude Include="..\src\CColor.h" />
     <ClInclude Include="..\src\CShaderFromFile.h" />
+    <ClInclude Include="..\src\CUseModel.h" />
     <ClInclude Include="..\src\CUseShaderFile.h" />
     <ClInclude Include="..\src\Global.h" />
     <ClInclude Include="..\src\LightCasters.h" />
     <ClInclude Include="..\src\LightCastersSpot.h" />
     <ClInclude Include="..\src\LightMaterial.h" />
     <ClInclude Include="..\src\Material.h" />
+    <ClInclude Include="..\src\mesh.h" />
+    <ClInclude Include="..\src\model.h" />
     <ClInclude Include="..\src\MultipleLight.h" />
     <ClInclude Include="..\src\triangle_shader.h" />
   </ItemGroup>
@@ -162,6 +168,8 @@
     <None Include="..\path\mat4_shader.vs" />
     <None Include="..\path\materials.fs" />
     <None Include="..\path\materials.vs" />
+    <None Include="..\path\model_loading.fs" />
+    <None Include="..\path\model_loading.vs" />
     <None Include="..\path\multiple_lights.fs" />
     <None Include="..\path\multiple_lights.vs" />
     <None Include="..\path\Shader.fs" />
