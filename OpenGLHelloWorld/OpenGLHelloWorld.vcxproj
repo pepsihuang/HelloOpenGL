@@ -142,6 +142,7 @@
     <ClInclude Include="..\src\CShaderFromFile.h" />
     <ClInclude Include="..\src\CUseModel.h" />
     <ClInclude Include="..\src\CUseShaderFile.h" />
+    <ClInclude Include="..\src\DepthTest.h" />
     <ClInclude Include="..\src\Global.h" />
     <ClInclude Include="..\src\LightCasters.h" />
     <ClInclude Include="..\src\LightCastersSpot.h" />

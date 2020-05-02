@@ -95,6 +95,9 @@
     <ClInclude Include="..\src\CUseModel.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\DepthTest.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\path\Shader.fs">
