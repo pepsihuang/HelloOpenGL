@@ -38,6 +38,7 @@ CShaderFromFile::CShaderFromFile(const char* vefilepath, const char* fragfilepat
 	catch(std::ifstream::failure& e)
 	{
 		std::cout << " FILE OPEN FAILED! "<<e.code() << std::endl;
+		return;
 	}
 	const char* char_codev = codev.c_str();
 	const char* char_codef = codef.c_str();

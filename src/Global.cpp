@@ -9,6 +9,7 @@
 #include "LightCastersSpot.h"
 #include "MultipleLight.h"
 #include "CUseModel.h"
+#include "DepthTest.h"
 
 static CBase* base = NULL;
 
@@ -16,7 +17,7 @@ CBase* GetPtr()
 {
 	if (!base)
 	{
-		base = new CUseModel;
+		base = new DepthTest;
 	}
 	return base;
 }
