@@ -35,7 +35,7 @@ int CBase::init()
 	m_wnd = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Hello OpenGL", NULL, NULL);
 	if (!m_wnd)
 	{
-		std::cout << "创建失败" << std::endl;
+		std::cout << "CBase创建GL窗口失败" << std::endl;
 		glfwTerminate();
 		return -1;
 	}

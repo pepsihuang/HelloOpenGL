@@ -5,14 +5,15 @@
 
 class DepthTest : public CBase {
 public:
-	DepthTest() {
-
+	DepthTest() 
+	:mShader("../path/depthtest.vs", "../path/depthtest.fs")
+	{
 	}
 	~DepthTest(){
 		glDeleteBuffers(1, &planeVBO);
 	}
 
-	CShaderFromFile mShader{ "../path/depthtest.vs", "../path/depthtest.fs" };
+	CShaderFromFile mShader;
 	
 
 	unsigned int planeVAO, planeVBO;
